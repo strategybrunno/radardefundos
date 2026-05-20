@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARTIS — Radar de Fundos Audiovisuais</title>
+<link href="https://fonts.googleapis.com/css2?family=Cooper+Hewitt:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white:   #FFFFFF;
+    --black:   #000000;
+    --amber:   #AD5914;
+    --gray-100:#f5f5f5;
+    --gray-200:#e8e8e8;
+    --gray-300:#cccccc;
+    --gray-400:#999999;
+    --gray-600:#555555;
+    --green:   #2a2a2a;
+    --green-lt:#efefef;
+    --yellow:  #2a2a2a;
+    --yellow-lt:#efefef;
+    --red:     #2a2a2a;
+    --red-lt:  #efefef;
+    --purple:  #2a2a2a;
+    --purple-lt:#efefef;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: 'Cooper Hewitt', 'Segoe UI', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--black);
+    padding: 0 40px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; gap: 32px; height: 64px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 0;
+    text-decoration: none; flex-shrink: 0;
+    letter-spacing: 2px;
+  }
+  .logo-art { font-size: 20px; font-weight: 500; color: var(--white); }
+  .logo-is  { font-size: 20px; font-weight: 300; color: var(--amber); }
+  .logo-sep { width: 1px; height: 20px; background: var(--gray-600); margin: 0 12px; }
+  .logo-sub { font-size: 11px; font-weight: 300; color: var(--gray-400); letter-spacing: 3px; text-transform: uppercase; }
+
+  .header-search { flex: 1; max-width: 440px; position: relative; }
+  .header-search input {
+    width: 100%;
+    background: transparent;
+    border: none; border-bottom: 1px solid var(--gray-600);
+    padding: 8px 14px 8px 32px;
+    color: var(--white); font-size: 13px; font-family: inherit; font-weight: 300;
+    outline: none; transition: border-color 0.2s; letter-spacing: 0.5px;
+  }
+  .header-search input:focus { border-bottom-color: var(--white); }
+  .header-search input::placeholder { color: var(--gray-400); }
+  .search-icon { position: absolute; left: 0; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 14px; }
+  .header-actions { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+  .live-dot { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--gray-400); letter-spacing: 2px; text-transform: uppercase; }
+  .live-dot::before { content:''; width: 7px; height: 7px; border-radius: 50%; background: var(--white); display: block; }
+  .btn-primary {
+    background: var(--white); color: var(--black); border: none;
+    padding: 9px 20px; font-size: 12px; font-family: inherit; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--gray-200); }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--black);
+    padding: 56px 40px 48px;
+    position: relative; overflow: hidden;
+  }
+  .hero-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; }
+  .hero-left h1 {
+    font-size: 64px; font-weight: 300; color: var(--white);
+    letter-spacing: -1px; line-height: 1.05; text-transform: uppercase;
+  }
+  .hero-left h1 span { color: var(--gray-300); }
+  .hero-left p { color: var(--gray-400); margin-top: 16px; font-size: 14px; font-weight: 300; letter-spacing: 1px; line-height: 1.6; max-width: 440px; }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--gray-600); border: 1px solid var(--gray-600); }
+  .stat-box {
+    background: var(--black); padding: 24px 28px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .stat-box:hover { background: #111; }
+  .stat-num { font-size: 40px; font-weight: 300; color: var(--white); line-height: 1; }
+  .stat-num.amber { color: var(--white); }
+  .stat-lbl { font-size: 11px; color: var(--gray-400); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* ─── FEATURED BANNER ─── */
+  .featured-wrap { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
+  .featured-banner {
+    background: var(--amber); padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: nowrap; overflow: hidden;
+  }
+  .featured-label {
+    font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.7);
+    letter-spacing: 3px; text-transform: uppercase; white-space: nowrap;
+    border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; flex-shrink: 0;
+  }
+  .featured-text { flex: 1; min-width: 0; }
+  .featured-text h3 {
+    font-size: 12px; font-weight: 500; color: var(--white);
+    letter-spacing: 0.2px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .featured-text p { display: none; }
+  .featured-cta {
+    background: var(--white); color: var(--amber); border: none;
+    padding: 7px 14px; font-size: 10px; font-family: inherit; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+    transition: opacity 0.2s; white-space: nowrap; flex-shrink: 0;
+  }
+  .featured-cta:hover { opacity: 0.85; }
+
+  /* ─── MOBILE FILTER BAR (shown < 900px) ─── */
+  .mobile-filters {
+    display: none;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    gap: 8px; padding: 12px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--white);
+    /* hide scrollbar */
+    scrollbar-width: none;
+  }
+  .mobile-filters::-webkit-scrollbar { display: none; }
+  .mf-group {
+    display: flex; gap: 4px; flex-shrink: 0;
+    border-right: 1px solid var(--gray-200); padding-right: 12px; margin-right: 4px;
+  }
+  .mf-group:last-child { border-right: none; }
+  .mf-btn {
+    flex-shrink: 0; background: transparent; border: 1px solid var(--gray-200);
+    color: var(--gray-600); padding: 5px 10px; font-size: 11px; font-family: inherit;
+    font-weight: 300; letter-spacing: 0.5px; cursor: pointer; white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .mf-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+  .mf-btn:hover:not(.active) { border-color: var(--black); color: var(--black); }
+
+  /* ─── MAIN LAYOUT ─── */
+  /* Mobile-first: single column */
+  .main {
+    max-width: 1400px; margin: 0 auto;
+    padding: 20px 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar { display: none; flex-direction: column; gap: 28px; }
+  .filter-block {}
+  .filter-title {
+    font-size: 10px; font-weight: 500; color: var(--black);
+    text-transform: uppercase; letter-spacing: 3px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--black);
+    margin-bottom: 12px;
+  }
+  .filter-options { display: flex; flex-direction: column; gap: 2px; }
+  .filter-opt {
+    display: flex; align-items: center; gap: 10px; padding: 7px 0;
+    cursor: pointer; font-size: 12px; color: var(--gray-600); font-weight: 300;
+    border-bottom: 1px solid var(--gray-200); transition: color 0.15s; letter-spacing: 0.3px;
+  }
+  .filter-opt:hover { color: var(--black); }
+  .filter-opt.active { color: var(--black); font-weight: 500; }
+  .filter-opt.active::before { content: '→'; color: var(--black); font-size: 11px; }
+  .filter-opt:not(.active)::before { content: ''; width: 10px; display: inline-block; }
+  .filter-opt .count { margin-left: auto; font-size: 10px; color: var(--gray-400); font-weight: 300; }
+  .filter-opt.active .count { color: var(--black); }
+
+  /* ─── CONTENT ─── */
+  .content { display: flex; flex-direction: column; gap: 16px; }
+  .toolbar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding-bottom: 12px; border-bottom: 1px solid var(--black);
+  }
+  .results-count { font-size: 11px; color: var(--gray-600); letter-spacing: 1px; }
+  .results-count strong { color: var(--black); font-weight: 500; }
+  .sort-select {
+    margin-left: auto; background: transparent; border: none; border-bottom: 1px solid var(--gray-400);
+    color: var(--gray-600); padding: 4px 6px; font-size: 11px; font-family: inherit;
+    font-weight: 300; outline: none; cursor: pointer; letter-spacing: 0.5px;
+  }
+  .view-toggle { display: flex; gap: 0; border: 1px solid var(--gray-200); }
+  .view-btn { padding: 5px 10px; cursor: pointer; font-size: 12px; color: var(--gray-400); background: none; border: none; transition: all 0.2s; }
+  .view-btn.active { background: var(--black); color: var(--white); }
+  .active-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-chip {
+    background: transparent; border: 1px solid var(--black);
+    color: var(--black); padding: 3px 10px; font-size: 10px; font-family: inherit;
+    display: flex; align-items: center; gap: 6px; cursor: pointer; letter-spacing: 0.5px;
+    font-weight: 300; transition: background 0.15s;
+  }
+  .filter-chip:hover { background: var(--gray-100); }
+  .chip-x { font-size: 13px; opacity: 0.7; }
+
+  /* ─── CARDS — mobile first ─── */
+  /* 1 col on mobile */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px; background: var(--gray-200);
+  }
+  .fund-card {
+    background: var(--white); padding: 18px 16px; cursor: pointer;
+    transition: background 0.15s; position: relative;
+    display: flex; flex-direction: column; gap: 11px;
+  }
+  .fund-card:hover { background: var(--gray-100); }
+  .fund-card .card-accent-bar { position: absolute; top: 0; left: 0; width: 3px; height: 100%; }
+  .fund-card.status-open     .card-accent-bar { background: var(--black); }
+  .fund-card.status-closing  .card-accent-bar { background: var(--gray-400); }
+  .fund-card.status-closed   .card-accent-bar { background: var(--gray-200); }
+  .fund-card.status-bilateral .card-accent-bar { background: var(--gray-300); }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .card-icon { font-size: 18px; line-height: 1; }
+  .status-badge {
+    font-size: 8px; font-weight: 500; padding: 3px 7px; letter-spacing: 1.5px;
+    text-transform: uppercase; white-space: nowrap; flex-shrink: 0;
+  }
+  .status-open      { background: var(--black); color: var(--white); }
+  .status-closing   { background: var(--gray-100); color: var(--gray-600); }
+  .status-closed    { background: var(--gray-100); color: var(--gray-400); }
+  .status-bilateral { background: var(--gray-200); color: var(--gray-600); }
+
+  .card-name { font-size: 14px; font-weight: 500; color: var(--black); line-height: 1.25; letter-spacing: -0.1px; }
+  .card-org  { font-size: 10px; color: var(--gray-400); margin-top: 3px; font-weight: 300; letter-spacing: 0.3px; line-height: 1.4; }
+  .card-desc {
+    font-size: 12px; color: var(--gray-600); line-height: 1.6; font-weight: 300;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1;
+  }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .phase-tag { display: inline-flex; align-items: center; font-size: 9px; padding: 2px 7px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; border: 1px solid var(--gray-300); color: var(--gray-600); }
+  .phase-prod { border-color: var(--black); color: var(--black); }
+
+  .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px solid var(--gray-200); padding-top: 12px; }
+  .meta-label { font-size: 8px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px; }
+  .meta-value { font-size: 12px; color: var(--black); font-weight: 500; }
+  .meta-value.amber  { color: var(--black); }
+  .meta-value.green  { color: var(--black); }
+  .meta-value.yellow { color: var(--gray-600); }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-region { font-size: 11px; color: var(--gray-400); font-weight: 300; }
+  .card-cta { font-size: 10px; color: var(--gray-400); font-weight: 300; letter-spacing: 1px; text-transform: uppercase; transition: color 0.15s; }
+  .fund-card:hover .card-cta { color: var(--black); }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000;
+    display: flex; align-items: flex-end; justify-content: center; padding: 0;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .modal-overlay.visible { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--white); width: 100%; max-width: 100%;
+    max-height: 92vh; overflow-y: auto;
+    transform: translateY(24px); transition: transform 0.25s;
+    border-radius: 0;
+  }
+  .modal-overlay.visible .modal { transform: translateY(0); }
+  /* on wider screens, center as a dialog */
+  @media (min-width: 680px) {
+    .modal-overlay { align-items: center; padding: 24px; }
+    .modal { max-width: 640px; max-height: 88vh; }
+  }
+
+  .modal-header {
+    background: var(--black); padding: 28px 32px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .modal-close {
+    position: absolute; top: 20px; right: 24px;
+    background: none; border: 1px solid var(--gray-600);
+    color: var(--white); width: 30px; height: 30px; cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s;
+  }
+  .modal-close:hover { border-color: var(--amber); color: var(--amber); }
+  .modal-icon { font-size: 28px; margin-bottom: 12px; }
+  .modal-title { font-size: 24px; font-weight: 300; color: var(--white); letter-spacing: -0.3px; line-height: 1.15; }
+  .modal-subtitle { font-size: 12px; color: var(--gray-400); margin-top: 6px; letter-spacing: 0.5px; }
+  .modal-status { margin-top: 14px; display: inline-block; font-size: 10px; font-weight: 500; padding: 4px 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .modal-body { padding: 32px; display: flex; flex-direction: column; gap: 28px; }
+  .modal-desc { font-size: 14px; color: var(--gray-600); line-height: 1.75; font-weight: 300; }
+
+  .modal-section-title { font-size: 10px; font-weight: 500; color: var(--black); text-transform: uppercase; letter-spacing: 3px; padding-bottom: 10px; border-bottom: 1px solid var(--black); margin-bottom: 14px; }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--gray-200); }
+  .info-box { background: var(--white); padding: 16px 18px; }
+  .info-box-label { font-size: 9px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .info-box-value { font-size: 14px; font-weight: 500; color: var(--black); }
+  .info-box-value.amber { color: var(--black); }
+  .info-box-value.green { color: var(--black); }
+
+  .phases-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .eligibility-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .eligibility-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gray-600); font-weight: 300; line-height: 1.6; }
+  .eligibility-list li::before { content: '—'; color: var(--gray-400); font-weight: 300; flex-shrink: 0; }
+
+  .note-box { background: var(--gray-100); border-left: 2px solid var(--black); padding: 14px 18px; }
+  .note-box p { font-size: 13px; color: var(--gray-600); font-weight: 300; line-height: 1.6; }
+  .note-box p strong { color: var(--black); font-weight: 500; display: block; margin-bottom: 3px; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; }
+
+  .countries-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .country-tag { background: var(--gray-100); border: 1px solid var(--gray-200); padding: 4px 10px; font-size: 12px; color: var(--gray-600); font-weight: 300; }
+
+  .modal-actions { display: flex; gap: 10px; padding-top: 8px; border-top: 1px solid var(--gray-200); }
+  .btn-modal-primary { flex: 1; background: var(--black); color: var(--white); border: none; padding: 14px; font-size: 12px; font-family: inherit; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s; }
+  .btn-modal-primary:hover { opacity: 0.8; }
+  .btn-modal-secondary { background: transparent; color: var(--gray-600); border: 1px solid var(--gray-200); padding: 14px 20px; font-size: 12px; font-family: inherit; cursor: pointer; transition: border-color 0.2s; letter-spacing: 1px; }
+  .btn-modal-secondary:hover { border-color: var(--black); color: var(--black); }
+
+  /* ─── SUGGEST MODAL FORM ─── */
+  .suggest-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1100;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .suggest-overlay.visible { opacity: 1; pointer-events: all; }
+  .suggest-modal {
+    background: var(--white); width: 100%; max-width: 560px;
+    max-height: 92vh; overflow-y: auto;
+    transform: translateY(16px); transition: transform 0.2s;
+  }
+  .suggest-overlay.visible .suggest-modal { transform: translateY(0); }
+  .suggest-header {
+    background: var(--black); padding: 24px 28px; position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  }
+  .suggest-header-text {}
+  .suggest-header-text h2 { font-size: 18px; font-weight: 300; color: var(--white); letter-spacing: -0.2px; }
+  .suggest-header-text p { font-size: 11px; color: var(--gray-400); margin-top: 5px; letter-spacing: 0.5px; }
+  .suggest-close {
+    background: none; border: 1px solid var(--gray-600); color: var(--white);
+    width: 30px; height: 30px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: border-color 0.2s;
+  }
+  .suggest-close:hover { border-color: var(--amber); color: var(--amber); }
+
+  .suggest-body { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
+
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label {
+    font-size: 9px; font-weight: 500; color: var(--black);
+    text-transform: uppercase; letter-spacing: 3px;
+  }
+  .form-field label span.req { color: var(--amber); margin-left: 2px; }
+  .form-input, .form-select, .form-textarea {
+    background: transparent; border: none; border-bottom: 1px solid var(--gray-300);
+    padding: 9px 0; font-size: 13px; font-family: inherit; font-weight: 300;
+    color: var(--black); outline: none; transition: border-color 0.2s; letter-spacing: 0.3px;
+    width: 100%;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-bottom-color: var(--black); }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--gray-400); }
+  .form-input.error { border-bottom-color: #c00; }
+  .form-error-msg { font-size: 11px; color: #c00; display: none; }
+  .form-error-msg.show { display: block; }
+  .form-textarea { resize: vertical; min-height: 72px; border: 1px solid var(--gray-300); padding: 10px; }
+  .form-textarea:focus { border-color: var(--black); }
+  .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 4px center; cursor: pointer; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-checkgroup { display: flex; flex-wrap: wrap; gap: 8px; }
+  .check-item { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+  .check-item input[type=checkbox] { width: 14px; height: 14px; accent-color: var(--black); cursor: pointer; }
+  .check-item span { font-size: 12px; color: var(--gray-600); font-weight: 300; letter-spacing: 0.3px; }
+
+  .suggest-actions { display: flex; gap: 10px; padding-top: 8px; border-top: 1px solid var(--gray-200); }
+  .btn-suggest-submit {
+    flex: 1; background: var(--black); color: var(--white); border: none;
+    padding: 14px; font-size: 12px; font-family: inherit; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s;
+  }
+  .btn-suggest-submit:hover { opacity: 0.8; }
+  .btn-suggest-cancel {
+    background: transparent; color: var(--gray-600); border: 1px solid var(--gray-200);
+    padding: 14px 20px; font-size: 12px; font-family: inherit; cursor: pointer;
+    transition: border-color 0.2s; letter-spacing: 1px;
+  }
+  .btn-suggest-cancel:hover { border-color: var(--black); color: var(--black); }
+
+  /* toast */
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--black); color: var(--white); padding: 12px 24px;
+    font-size: 12px; font-weight: 300; letter-spacing: 1px;
+    opacity: 0; transition: all 0.3s; z-index: 2000; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── EMPTY ─── */
+  .empty-state { text-align: center; padding: 80px 20px; color: var(--gray-400); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-state h3 { font-size: 16px; color: var(--gray-600); font-weight: 300; letter-spacing: 1px; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--white); }
+  ::-webkit-scrollbar-thumb { background: var(--gray-200); }
+
+  /* ─── FOOTER STRIP ─── */
+  .footer-strip { background: var(--black); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; margin-top: 60px; }
+  .footer-logo { display: flex; align-items: baseline; gap: 0; letter-spacing: 2px; }
+  .footer-logo .art { font-size: 14px; font-weight: 500; color: var(--white); }
+  .footer-logo .is  { font-size: 14px; font-weight: 300; color: var(--amber); }
+  .footer-note { font-size: 11px; color: var(--gray-600); letter-spacing: 1px; }
+
+  /* ─── ARTIS LOGO SVG COMPONENT ─── */
+  .artis-mark {
+    display: flex; align-items: center; gap: 0; line-height: 1;
+    font-family: 'Cooper Hewitt', sans-serif; font-weight: 200;
+    letter-spacing: 0.08em;
+  }
+  .artis-mark .m-art { color: inherit; }
+  .artis-mark .m-sep {
+    width: 1px; background: currentColor; opacity: 0.5;
+    align-self: stretch; margin: 0.12em 0.18em;
+  }
+  .artis-mark .m-is  { color: inherit; }
+  /* size variants */
+  .artis-mark.sz-xs  { font-size: 13px; }
+  .artis-mark.sz-sm  { font-size: 20px; }
+  .artis-mark.sz-md  { font-size: 36px; }
+  .artis-mark.sz-lg  { font-size: 68px; }
+  .artis-mark.sz-xl  { font-size: 96px; }
+  /* color variants */
+  .artis-mark.on-dark  { color: var(--white); }
+  .artis-mark.on-light { color: #1a1a1a; }
+  .artis-mark.on-dark  .m-is { color: var(--white); }
+  .artis-mark.on-light .m-is { color: #1a1a1a; }
+
+  /* ─── LOCK SCREEN ─── */
+  #lockScreen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--black);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    transition: opacity 0.5s;
+  }
+  #lockScreen.unlocked { opacity: 0; pointer-events: none; }
+
+  /* Brand panel (left) */
+  .lock-brand {
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding: 56px 64px;
+    border-right: 1px solid #1e1e1e;
+    overflow: hidden; position: relative;
+  }
+  .lock-brand-top {}
+  .lock-brand-tagline {
+    font-size: 10px; color: var(--gray-600);
+    letter-spacing: 4px; text-transform: uppercase; margin-top: 28px;
+  }
+  .lock-brand-mid {
+    position: absolute; left: 64px; right: 64px; top: 50%;
+    transform: translateY(-50%);
+  }
+  .lock-brand-headline {
+    font-size: 13px; font-weight: 300; color: var(--gray-400);
+    letter-spacing: 0.5px; line-height: 2.2;
+    text-transform: uppercase;
+  }
+  .lock-brand-headline strong { color: var(--white); font-weight: 300; }
+  .lock-brand-rule { width: 32px; height: 1px; background: var(--gray-600); margin: 24px 0; }
+  .lock-brand-desc {
+    font-size: 12px; color: var(--gray-600); font-weight: 300;
+    line-height: 1.9; letter-spacing: 0.3px; max-width: 320px;
+  }
+  .lock-brand-bottom {
+    font-size: 10px; color: #2a2a2a; letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  /* Form panel (right) */
+  .lock-form-panel {
+    display: flex; flex-direction: column;
+    align-items: flex-start; justify-content: center;
+    padding: 56px 72px;
+  }
+  .lock-form-logo { margin-bottom: 48px; }
+  .lock-form-inner { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 0; }
+  .lock-access-label {
+    font-size: 9px; font-weight: 500; color: var(--gray-600);
+    letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px;
+  }
+  .lock-input-wrap { display: flex; flex-direction: column; gap: 0; margin-bottom: 8px; }
+  .lock-input-label {
+    font-size: 9px; color: var(--gray-600);
+    letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .lock-input {
+    width: 100%; background: transparent;
+    border: none; border-bottom: 1px solid #2a2a2a;
+    padding: 12px 0; font-size: 16px; font-family: inherit; font-weight: 300;
+    color: var(--white); outline: none; letter-spacing: 4px;
+    transition: border-color 0.2s; caret-color: var(--white);
+  }
+  .lock-input:focus { border-bottom-color: var(--gray-400); }
+  .lock-input.shake { animation: lockShake 0.35s ease; border-bottom-color: #844 !important; }
+  .lock-error {
+    font-size: 10px; color: #a55; letter-spacing: 2px; text-transform: uppercase;
+    height: 20px; margin-top: 8px; transition: opacity 0.2s;
+  }
+  .lock-error:empty { opacity: 0; }
+  .lock-btn {
+    width: 100%; background: var(--white); color: var(--black);
+    border: none; padding: 16px; font-size: 11px; font-family: inherit;
+    font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s; margin-top: 32px;
+  }
+  .lock-btn:hover { background: var(--gray-200); }
+  .lock-form-foot {
+    margin-top: 40px; font-size: 10px; color: #2a2a2a;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  @keyframes lockShake {
+    0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)}
+  }
+
+  /* ─── BREAKPOINTS (mobile-first: min-width) ─── */
+
+  /* Lock screen — mobile */
+  @media (max-width: 800px) {
+    #lockScreen { grid-template-columns: 1fr; }
+    .lock-brand { display: none; }
+    .lock-form-panel { padding: 48px 32px; align-items: center; }
+    .lock-form-inner { max-width: 100%; }
+  }
+
+  /* ── 480px — small phones ── */
+  @media (max-width: 479px) {
+    header { padding: 0 16px; }
+    .header-inner { gap: 12px; height: 56px; }
+    .header-search { max-width: 100%; flex: 1; }
+    .live-dot { display: none; }
+    .btn-primary { padding: 7px 12px; font-size: 10px; letter-spacing: 1px; }
+    .hero { padding: 28px 16px 24px; }
+    .hero-left h1 { font-size: 32px; }
+    .hero-left p { font-size: 12px; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .stat-num { font-size: 28px; }
+    .featured-wrap { padding: 0; }
+    .featured-banner { padding: 10px 16px; gap: 10px; }
+    .main { padding: 16px; }
+    .mobile-filters { display: flex; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .fund-card { padding: 16px 14px; gap: 10px; }
+    .footer-strip { padding: 16px; flex-direction: column; gap: 8px; align-items: flex-start; }
+  }
+
+  /* ── 480–767px — large phones ── */
+  @media (min-width: 480px) and (max-width: 767px) {
+    header { padding: 0 20px; }
+    .hero { padding: 32px 20px 28px; }
+    .hero-left h1 { font-size: 38px; }
+    .featured-wrap { padding: 0 20px; }
+    .main { padding: 20px; }
+    .mobile-filters { display: flex; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── 768px — tablets: 2 columns ── */
+  @media (min-width: 768px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .main { padding: 28px 28px; }
+    .hero { padding: 40px 28px 36px; }
+    .featured-wrap { padding: 0 28px; }
+    .featured-banner { padding: 14px 20px; gap: 18px; }
+    .featured-text h3 { font-size: 13px; }
+    .featured-text p { display: block; }
+    header { padding: 0 28px; }
+    .mobile-filters { display: flex; }
+    .hero-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .hero-left h1 { font-size: 48px; }
+    /* slightly larger cards on tablet */
+    .fund-card { padding: 20px 18px; gap: 12px; }
+    .card-name { font-size: 14px; }
+    .card-desc { -webkit-line-clamp: 3; }
+  }
+
+  /* ── 1024px — desktop: sidebar visible, 3 cols ── */
+  @media (min-width: 1024px) {
+    .main { grid-template-columns: 220px 1fr; gap: 36px; padding: 36px 40px; }
+    .sidebar { display: flex; }
+    .mobile-filters { display: none; }
+    .cards-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .hero { padding: 48px 40px 42px; }
+    .hero-left h1 { font-size: 56px; }
+    .featured-wrap { padding: 0 40px; }
+    .featured-banner { padding: 16px 24px; gap: 24px; }
+    .featured-text h3 { font-size: 14px; }
+    header { padding: 0 40px; }
+    .fund-card { padding: 22px 20px; gap: 13px; }
+    .card-name { font-size: 15px; }
+  }
+
+  /* ── 1280px — wide desktop ── */
+  @media (min-width: 1280px) {
+    .hero-left h1 { font-size: 64px; }
+    .cards-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <!-- Brand Panel (left) -->
+  <div class="lock-brand">
+    <div class="lock-brand-top">
+      <div class="artis-mark sz-md on-dark">
+        <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+      </div>
+      <div class="lock-brand-tagline">Fundos Audiovisuais</div>
+    </div>
+
+    <div class="lock-brand-mid">
+      <div class="lock-brand-headline">
+        <strong>28 fundos</strong> mapeados<br>
+        <strong>37 países</strong> parceiros<br>
+        <strong>€ 120M+</strong> disponíveis<br>
+      </div>
+      <div class="lock-brand-rule"></div>
+      <div class="lock-brand-desc">
+        Mapeamento atualizado de fundos internacionais, acordos bilaterais e linhas de co-produção acessíveis a projetos audiovisuais brasileiros.
+      </div>
+    </div>
+
+    <div class="lock-brand-bottom">© ARTIS 2026</div>
+  </div>
+
+  <!-- Form Panel (right) -->
+  <div class="lock-form-panel">
+    <div class="lock-form-logo">
+      <div class="artis-mark sz-sm on-dark">
+        <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+      </div>
+    </div>
+    <div class="lock-form-inner">
+      <div class="lock-access-label">Acesso Privado</div>
+      <div class="lock-input-wrap">
+        <label class="lock-input-label" for="lockPass">Senha</label>
+        <input class="lock-input" id="lockPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')unlock()">
+        <div class="lock-error" id="lockError"></div>
+      </div>
+      <button class="lock-btn" onclick="unlock()">Entrar →</button>
+      <div class="lock-form-foot">Acesso restrito</div>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#" style="text-decoration:none; display:flex; align-items:center; gap:0; flex-shrink:0;">
+      <span class="artis-mark sz-sm on-dark" style="letter-spacing:0.12em;">
+        <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+      </span>
+      <span style="width:1px;height:20px;background:var(--gray-600);margin:0 14px;flex-shrink:0;"></span>
+      <span style="font-size:10px;font-weight:300;color:var(--gray-400);letter-spacing:4px;text-transform:uppercase;">Fundos AV</span>
+    </a>
+    <div class="header-search">
+      <span class="search-icon">↗</span>
+      <input type="text" id="mainSearch" placeholder="Buscar fundo, país, fase..." autocomplete="off">
+    </div>
+    <div class="header-actions">
+      <span class="live-dot">Ao vivo</span>
+      <button class="btn-primary" onclick="showAddFundModal()">+ Sugerir Fundo</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- Watermark background logo -->
+  <div style="position:absolute; bottom:-20px; right:40px; pointer-events:none; user-select:none; line-height:1;">
+    <div class="artis-mark on-dark" style="font-size:200px; opacity:0.04; letter-spacing:0.06em; white-space:nowrap;">
+      <span class="m-art">ART</span><span class="m-sep" style="margin:0 0.1em;"></span><span class="m-is">IS</span>
+    </div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>RADAR<br>DE FUNDOS<br><span>AUDIOVISUAIS</span></h1>
+      <p>Mapeamento atualizado de fundos internacionais e acordos de co-produção com parceria para projetos brasileiros.</p>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-num amber" id="statOpen">—</span>
+        <span class="stat-lbl">Fundos abertos</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" id="statTotal">—</span>
+        <span class="stat-lbl">Total mapeado</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" id="statCountries">37</span>
+        <span class="stat-lbl">Países parceiros</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num" id="statClosing">—</span>
+        <span class="stat-lbl">Encerrando em breve</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<div class="featured-wrap" style="margin-top:0">
+  <div class="featured-banner">
+    <span class="featured-label">Atualizado 2026</span>
+    <div class="featured-text">
+      <h3>28 fundos · 37 países · €120M+ disponíveis</h3>
+      <p>Acordos bilaterais, fundos nacionais e linhas internacionais para co-produção brasileira.</p>
+    </div>
+    <button class="featured-cta" onclick="openFundById('fsa-internacional')">Ver FSA →</button>
+  </div>
+</div>
+
+<!-- MOBILE FILTER BAR (hidden on desktop, visible < 1024px) -->
+<div class="mobile-filters" id="mobileFilters">
+  <div class="mf-group">
+    <button class="mf-btn active" data-filter="status" data-value="all" onclick="mfToggle(this)">Todos</button>
+    <button class="mf-btn" data-filter="status" data-value="open" onclick="mfToggle(this)">Abertos</button>
+    <button class="mf-btn" data-filter="status" data-value="closing" onclick="mfToggle(this)">Encerrando</button>
+    <button class="mf-btn" data-filter="status" data-value="bilateral" onclick="mfToggle(this)">Bilateral</button>
+    <button class="mf-btn" data-filter="status" data-value="closed" onclick="mfToggle(this)">Encerrado</button>
+  </div>
+  <div class="mf-group">
+    <button class="mf-btn active" data-filter="region" data-value="all" onclick="mfToggle(this)">Região</button>
+    <button class="mf-btn" data-filter="region" data-value="europe" onclick="mfToggle(this)">Europa</button>
+    <button class="mf-btn" data-filter="region" data-value="americas" onclick="mfToggle(this)">Américas</button>
+    <button class="mf-btn" data-filter="region" data-value="global" onclick="mfToggle(this)">Global</button>
+    <button class="mf-btn" data-filter="region" data-value="asia" onclick="mfToggle(this)">Ásia</button>
+    <button class="mf-btn" data-filter="region" data-value="africa" onclick="mfToggle(this)">África</button>
+    <button class="mf-btn" data-filter="region" data-value="lusophone" onclick="mfToggle(this)">Lusofonia</button>
+  </div>
+  <div class="mf-group">
+    <button class="mf-btn active" data-filter="phase" data-value="all" onclick="mfToggle(this)">Fase</button>
+    <button class="mf-btn" data-filter="phase" data-value="development" onclick="mfToggle(this)">Dev</button>
+    <button class="mf-btn" data-filter="phase" data-value="production" onclick="mfToggle(this)">Produção</button>
+    <button class="mf-btn" data-filter="phase" data-value="post" onclick="mfToggle(this)">Pós</button>
+    <button class="mf-btn" data-filter="phase" data-value="distribution" onclick="mfToggle(this)">Dist.</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="filter-block">
+      <div class="filter-title">Status</div>
+      <div class="filter-options">
+        <div class="filter-opt active" data-filter="status" data-value="all" onclick="toggleFilter(this)">Todos <span class="count" id="countAll">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="open" onclick="toggleFilter(this)">Abertos <span class="count" id="countOpen">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="closing" onclick="toggleFilter(this)">Encerrando <span class="count" id="countClosing">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="bilateral" onclick="toggleFilter(this)">Bilateral / Acordo <span class="count" id="countBilateral">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="closed" onclick="toggleFilter(this)">Encerrado <span class="count" id="countClosed">—</span></div>
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-title">Região</div>
+      <div class="filter-options">
+        <div class="filter-opt active" data-filter="region" data-value="all" onclick="toggleFilter(this)">Todas as regiões</div>
+        <div class="filter-opt" data-filter="region" data-value="europe" onclick="toggleFilter(this)">Europa</div>
+        <div class="filter-opt" data-filter="region" data-value="americas" onclick="toggleFilter(this)">Américas</div>
+        <div class="filter-opt" data-filter="region" data-value="global" onclick="toggleFilter(this)">Global</div>
+        <div class="filter-opt" data-filter="region" data-value="asia" onclick="toggleFilter(this)">Ásia</div>
+        <div class="filter-opt" data-filter="region" data-value="africa" onclick="toggleFilter(this)">África</div>
+        <div class="filter-opt" data-filter="region" data-value="lusophone" onclick="toggleFilter(this)">Lusofonia</div>
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-title">Fase</div>
+      <div class="filter-options">
+        <div class="filter-opt active" data-filter="phase" data-value="all" onclick="toggleFilter(this)">Todas as fases</div>
+        <div class="filter-opt" data-filter="phase" data-value="development" onclick="toggleFilter(this)">Desenvolvimento</div>
+        <div class="filter-opt" data-filter="phase" data-value="production" onclick="toggleFilter(this)">Produção</div>
+        <div class="filter-opt" data-filter="phase" data-value="post" onclick="toggleFilter(this)">Pós-produção</div>
+        <div class="filter-opt" data-filter="phase" data-value="distribution" onclick="toggleFilter(this)">Distribuição</div>
+        <div class="filter-opt" data-filter="phase" data-value="training" onclick="toggleFilter(this)">Formação</div>
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-title">Formato</div>
+      <div class="filter-options">
+        <div class="filter-opt active" data-filter="format" data-value="all" onclick="toggleFilter(this)">Todos os formatos</div>
+        <div class="filter-opt" data-filter="format" data-value="fiction" onclick="toggleFilter(this)">Ficção</div>
+        <div class="filter-opt" data-filter="format" data-value="documentary" onclick="toggleFilter(this)">Documentário</div>
+        <div class="filter-opt" data-filter="format" data-value="animation" onclick="toggleFilter(this)">Animação</div>
+        <div class="filter-opt" data-filter="format" data-value="series" onclick="toggleFilter(this)">Séries</div>
+      </div>
+    </div>
+
+    <!-- Sidebar brand credit -->
+    <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid var(--gray-200);">
+      <div class="artis-mark on-light" style="font-size:22px; letter-spacing:0.12em; opacity:0.18;">
+        <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+      </div>
+      <div style="font-size:9px; color:var(--gray-300); letter-spacing:3px; text-transform:uppercase; margin-top:6px;">Radar de Fundos AV</div>
+    </div>
+
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div class="toolbar">
+      <span class="results-count"><strong id="resultsCount">0</strong> fundos encontrados</span>
+      <div id="activeFiltersRow" class="active-filters"></div>
+      <select class="sort-select" id="sortSelect" onchange="renderCards()">
+        <option value="status">Ordenar: Status</option>
+        <option value="name">Nome A–Z</option>
+        <option value="grant">Valor do Grant</option>
+      </select>
+      <div class="view-toggle">
+        <button class="view-btn active" id="viewGrid" onclick="setView('grid')">⊞</button>
+        <button class="view-btn" id="viewList" onclick="setView('list')">☰</button>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="icon">◎</div>
+      <h3>Nenhum fundo encontrado</h3>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-strip">
+  <div class="artis-mark sz-xs on-dark" style="font-size:16px; letter-spacing:0.14em;">
+    <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+  </div>
+  <span class="footer-note">Radar de Fundos Audiovisuais Internacionais — Atualizado 2026</span>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- SUGGEST FUND MODAL -->
+<div class="suggest-overlay" id="suggestOverlay" onclick="closeSuggestModal(event)">
+  <div class="suggest-modal" id="suggestModal">
+    <div class="suggest-header">
+      <div class="suggest-header-text">
+        <div class="artis-mark on-dark sz-xs" style="font-size:11px; letter-spacing:0.14em; margin-bottom:8px; opacity:0.5;">
+          <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+        </div>
+        <h2>Sugerir Fundo</h2>
+        <p>Indique um fundo internacional via link — adicionamos à base.</p>
+      </div>
+      <button class="suggest-close" onclick="closeSuggestModal()">×</button>
+    </div>
+    <div class="suggest-body">
+      <div class="form-field">
+        <label>Link / URL do fundo <span class="req">*</span></label>
+        <input class="form-input" id="sf-url" type="url" placeholder="https://..." autocomplete="off">
+        <span class="form-error-msg" id="sf-url-err">Insira um link válido (https://...)</span>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Nome do fundo</label>
+          <input class="form-input" id="sf-name" type="text" placeholder="Ex: IDFA Bertha Fund" autocomplete="off">
+        </div>
+        <div class="form-field">
+          <label>Organização</label>
+          <input class="form-input" id="sf-org" type="text" placeholder="Ex: IDFA / Bertha Foundation" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Região</label>
+          <select class="form-select" id="sf-region">
+            <option value="global">Global</option>
+            <option value="europe">Europa</option>
+            <option value="americas">Américas</option>
+            <option value="asia">Ásia</option>
+            <option value="africa">África</option>
+            <option value="lusophone">Lusofonia</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Status</label>
+          <select class="form-select" id="sf-status">
+            <option value="open">Aberto</option>
+            <option value="closing">Encerrando em breve</option>
+            <option value="bilateral">Bilateral / Acordo</option>
+            <option value="closed">Encerrado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Fases apoiadas</label>
+        <div class="form-checkgroup">
+          <label class="check-item"><input type="checkbox" id="sf-phase-dev" value="development"><span>Desenvolvimento</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-prod" value="production"><span>Produção</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-post" value="post"><span>Pós-produção</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-dist" value="distribution"><span>Distribuição</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-train" value="training"><span>Formação</span></label>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Formatos</label>
+        <div class="form-checkgroup">
+          <label class="check-item"><input type="checkbox" id="sf-fmt-fic" value="fiction"><span>Ficção</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-fmt-doc" value="documentary"><span>Documentário</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-fmt-ani" value="animation"><span>Animação</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-fmt-ser" value="series"><span>Séries</span></label>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Valor do grant</label>
+          <input class="form-input" id="sf-grant" type="text" placeholder="Ex: €50.000" autocomplete="off">
+        </div>
+        <div class="form-field">
+          <label>Prazo / edital</label>
+          <input class="form-input" id="sf-deadline" type="text" placeholder="Ex: Março 2026" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Observações</label>
+        <textarea class="form-textarea" id="sf-notes" placeholder="Informações adicionais sobre o fundo..."></textarea>
+      </div>
+      <div class="suggest-actions">
+        <button class="btn-suggest-cancel" onclick="closeSuggestModal()">Cancelar</button>
+        <button class="btn-suggest-submit" onclick="submitSuggestFund()">Adicionar fundo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// ACESSO — altere a senha abaixo
+// ═══════════════════════════════════════
+const ACCESS_PASSWORD = 'is3yR&cF0c882YoH';
+
+(function initLock() {
+  const lock = document.getElementById('lockScreen');
+  // Já autenticado nesta sessão?
+  if (sessionStorage.getItem('artis_auth') === '1') {
+    lock.style.display = 'none';
+    return;
+  }
+  // Focar input ao carregar
+  window.addEventListener('DOMContentLoaded', () => {
+    const inp = document.getElementById('lockPass');
+    if (inp) inp.focus();
+  });
+})();
+
+function unlock() {
+  const inp = document.getElementById('lockPass');
+  const err = document.getElementById('lockError');
+  const lock = document.getElementById('lockScreen');
+  if (inp.value === ACCESS_PASSWORD) {
+    sessionStorage.setItem('artis_auth', '1');
+    lock.classList.add('unlocked');
+    setTimeout(() => lock.style.display = 'none', 420);
+    err.textContent = '';
+  } else {
+    inp.classList.add('shake');
+    err.textContent = 'Senha incorreta.';
+    inp.value = '';
+    setTimeout(() => { inp.classList.remove('shake'); inp.focus(); }, 400);
+  }
+}
+
+// ═══════════════════════════════════════
+// DATA  (28 fundos — atualizado com docx Acordos ANCINE)
+// ═══════════════════════════════════════
+const funds = [
+  {
+    id:'hbf-brazil', name:'HBF+Brazil: Co-development Support',
+    org:'Hubert Bals Fund / IFFR × Spcine × RioFilme × Projeto Paradiso',
+    icon:'🎞', status:'open', region:'europe', regions_display:'Holanda / Brasil',
+    phases:['development'], formats:['fiction'],
+    grant:'€10.000 / projeto', grantNum:10000,
+    deadline:'Aberto — edital em breve', deadlineUrgency:'cool',
+    countries:['Brasil','Holanda'],
+    desc:'Parceria inédita lançada em Cannes 2025. Apoia até 9 projetos de longa-metragem de ficção brasileira em fase de desenvolvimento (2ª e 3ª obras). Cada projeto recebe €10.000 e a chancela do HBF.',
+    eligibility:['Diretores brasileiros com 1 ou 2 longas anteriores','Projetos de ficção em fase inicial de desenvolvimento','Produtora brasileira anexada ao projeto','Não elegível para documentários'],
+    url:'https://iffr.com/en/hubert-bals-fund/funding-schemes/hbfbrazil-co-development-support',
+    notes:'Projeto piloto de 3 anos. Primeira edição em 2025.',
+  },
+  {
+    id:'hbf-main', name:'Hubert Bals Fund — Produção & Pós',
+    org:'IFFR – Festival Internacional de Cinema de Rotterdam',
+    icon:'🎞', status:'open', region:'europe', regions_display:'Holanda / Global Sul',
+    phases:['production','post'], formats:['fiction','documentary'],
+    grant:'Até €50.000', grantNum:50000,
+    deadline:'2 chamadas / ano', deadlineUrgency:'cool',
+    countries:['Brasil','América Latina','África','Ásia','Oriente Médio'],
+    desc:'Criado em 1988, o HBF apoia projetos em países onde o financiamento local é escasso. Além do HBF+Brazil, mantém programas de produção, pós-produção e co-produção com Europa.',
+    eligibility:['Cineastas de países do Sul Global','Longas-metragens de ficção e documentário','Suporte em produção, pós-produção e co-produção','Projeto deve ter co-produtor europeu para o esquema HBF+Europe'],
+    url:'https://iffr.com/en/hubert-bals-fund',
+    notes:'',
+  },
+  {
+    id:'wcf', name:'World Cinema Fund',
+    org:'Berlinale / Fundação Cultural Federal Alemã',
+    icon:'🐻', status:'open', region:'europe', regions_display:'Alemanha / Global',
+    phases:['production','post','distribution'], formats:['fiction','documentary'],
+    grant:'€30.000 – €60.000', grantNum:45000,
+    deadline:'Chamadas anuais', deadlineUrgency:'cool',
+    countries:['Brasil','América Latina','Caribe','África','Oriente Médio','Ásia Central'],
+    desc:'Fundado em 2004 pela Berlinale e pela Kulturstiftung des Bundes. A América Latina (incluindo Brasil) é região prioritária. Apoia 10–15 filmes por ano em produção, pós-produção e distribuição.',
+    eligibility:['Longas-metragens de ficção e documentários criativos','Realizadores de América Latina, Caribe, África, Oriente Médio e Ásia','Preferência por projetos com parceria europeia/alemã','Projetos já em fase avançada de financiamento'],
+    url:'https://www.berlinale.de/en/world-cinema-fund/home/profile.html',
+    notes:'Novo diretor desde set/2025: Sata Cissokho.',
+  },
+  {
+    id:'ibermedia', name:'Programa Ibermedia',
+    org:'CAACI – Conferência de Autoridades Audiovisuais Ibero-americanas',
+    icon:'🌎', status:'open', region:'americas', regions_display:'Ibero-América',
+    phases:['development','production','distribution','training'], formats:['fiction','documentary','series'],
+    grant:'Variável por modalidade', grantNum:200000,
+    deadline:'Chamadas periódicas', deadlineUrgency:'cool',
+    countries:['Argentina','Brasil','Chile','Colômbia','Cuba','México','Portugal','Espanha','+ 14 países'],
+    desc:'Principal programa multilateral ibero-americano, criado em 1997. O Brasil é membro contribuinte. Cobre co-produção, co-desenvolvimento, distribuição e formação entre os 22 países membros.',
+    eligibility:['Produtoras de países membros do CAACI','Co-produção obrigatória entre ao menos 2 países membros','Modalidades: co-produção, co-desenvolvimento, distribuição, formação','Documentários, ficção e séries'],
+    url:'https://www.programaibermedia.com',
+    notes:'Brasil é um dos maiores beneficiários do programa.',
+  },
+  {
+    id:'idfa-bertha', name:'IDFA Bertha Fund',
+    org:'Festival Internacional de Documentário de Amsterdã',
+    icon:'📹', status:'open', region:'europe', regions_display:'Holanda / Sul Global',
+    phases:['development','production','post'], formats:['documentary'],
+    grant:'Até €25.000', grantNum:25000,
+    deadline:'3 rounds / ano', deadlineUrgency:'warm',
+    countries:['Brasil','África','Ásia','América Latina','Europa Oriental'],
+    desc:'Fundo ligado ao IDFA focado exclusivamente em documentários de realizadores do Sul Global. Cobre desenvolvimento, produção e pós-produção. Documentaristas brasileiros já receberam múltiplos apoios.',
+    eligibility:['Diretores do Sul Global (inclui Brasil)','Documentários de longa-metragem e médias','Projetos em qualquer fase de produção','Preferência por projetos com potencial de festival'],
+    url:'https://www.idfa.nl/en/info/idfa-bertha-fund',
+    notes:'',
+  },
+  {
+    id:'sundance', name:'Sundance Institute Documentary Fund',
+    org:'Sundance Institute',
+    icon:'🌞', status:'open', region:'global', regions_display:'EUA / Global',
+    phases:['development','production'], formats:['documentary'],
+    grant:'Até $50.000', grantNum:50000,
+    deadline:'Chamadas anuais', deadlineUrgency:'cool',
+    countries:['Brasil','América Latina','Global'],
+    desc:'O Sundance Documentary Fund apoia documentários de não-ficção com foco em histórias subrepresentadas. O Brasil figura entre os países com projetos apoiados.',
+    eligibility:['Documentários de qualquer país','Preferência por projetos com perspectivas subrepresentadas','Projetos em desenvolvimento ou produção','Documentários de média e longa-metragem'],
+    url:'https://sundance.org/programs/documentary-fund',
+    notes:'',
+  },
+  {
+    id:'cplp', name:'CPLP Audiovisual',
+    org:'Comunidade dos Países de Língua Portuguesa',
+    icon:'🇵🇹', status:'open', region:'lusophone', regions_display:'Lusofonia',
+    phases:['production','distribution'], formats:['fiction','documentary'],
+    grant:'Fundo de €1M total', grantNum:100000,
+    deadline:'Primeiro edital 2025/2026', deadlineUrgency:'warm',
+    countries:['Brasil','Portugal','Angola','Moçambique','Cabo Verde','São Tomé','Guiné-Bissau','Timor-Leste'],
+    desc:'Novo programa formalizado pelo Brasil em 2025 com aporte de €1 milhão. Fomenta co-produções entre os países lusófonos. Potencial enorme para co-produções Brasil-Portugal-África lusófona.',
+    eligibility:['Produtoras de países membros da CPLP','Co-produção entre ao menos 2 países membros','Projetos de ficção e documentário','Primeiros editais previstos para 2025/2026'],
+    url:'https://www.cplp.org',
+    notes:'Programa recém-lançado — primeiros editais em breve.',
+  },
+  {
+    id:'eurimages', name:'Eurimages',
+    org:'Conselho da Europa',
+    icon:'🏛', status:'bilateral', region:'europe', regions_display:'Europa',
+    phases:['production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'Até €500.000', grantNum:500000,
+    deadline:'Via co-produtor europeu', deadlineUrgency:'cool',
+    countries:['Europa (44 países membros)'],
+    desc:'Maior fundo europeu de co-produção (44 países membros). O Brasil acessa via co-produtores europeus membros. Apoia ficção, documentário e animação de longa-metragem (mín. 70 min).',
+    eligibility:['Projetos com ao menos 3 co-produtores de países membros','Acesso do Brasil via co-produtores europeus','Longas de ficção, documentário e animação','Co-produção deve seguir as convenções europeias'],
+    url:'https://www.coe.int/en/web/eurimages',
+    notes:'Acesso indireto — via parceiro co-produtor europeu membro.',
+  },
+  {
+    id:'media', name:'Creative Europe – MEDIA',
+    org:'Comissão Europeia',
+    icon:'🇪🇺', status:'bilateral', region:'europe', regions_display:'Europa',
+    phases:['development','production','distribution','training'], formats:['fiction','documentary','animation','series'],
+    grant:'Variável', grantNum:300000,
+    deadline:'Via parceiro europeu', deadlineUrgency:'cool',
+    countries:['UE + países associados'],
+    desc:'Principal programa audiovisual da UE. O Brasil acessa via co-produções com empresas europeias. O esquema HBF+Europe é co-financiado pelo MEDIA, incentivando co-produções Europa–Sul Global.',
+    eligibility:['Acesso via co-produtora europeia','Múltiplos esquemas: desenvolvimento, distribuição, formação','HBF+Europe conecta diretamente Europa e Brasil','Projetos devem ter empresa europeia como majoritária'],
+    url:'https://creative-europe.ec.europa.eu/media',
+    notes:'',
+  },
+  {
+    id:'cnc-france', name:'CNC — Fonds Bilatéraux',
+    org:'Centre National du Cinéma et de l\'Image Animée (França)',
+    icon:'🇫🇷', status:'bilateral', region:'europe', regions_display:'França / Brasil',
+    phases:['development','production'], formats:['fiction','documentary','animation'],
+    grant:'Até €200.000', grantNum:200000,
+    deadline:'Editais do CNC', deadlineUrgency:'cool',
+    countries:['Brasil','França'],
+    desc:'O Brasil tem Acordo Bilateral de Co-produção com a França (um dos mais ativos). Em 2024 foi firmado novo MOU de cooperação com o CNC. O Fonds Sud apoiou historicamente dezenas de filmes brasileiros.',
+    eligibility:['Co-produção entre empresa francesa e brasileira','Projetos de ficção, documentário e animação','Reconhecimento como co-produção pelos dois países','Benefícios fiscais franceses disponíveis'],
+    url:'https://www.cnc.fr',
+    notes:'Novo MOU Brasil-CNC assinado em outubro de 2024.',
+  },
+  {
+    id:'telefilm', name:'Telefilm Canada',
+    org:'Agência Federal de Co-produção do Canadá',
+    icon:'🍁', status:'bilateral', region:'americas', regions_display:'Canadá / Brasil',
+    phases:['development','production'], formats:['fiction','documentary','animation'],
+    grant:'Variável por projeto', grantNum:300000,
+    deadline:'Via acordo bilateral', deadlineUrgency:'cool',
+    countries:['Brasil','Canadá'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com o Canadá. Co-produções Brasil-Canadá podem acessar incentivos dos dois países simultaneamente.',
+    eligibility:['Co-produção entre empresa canadense e brasileira','Projeto aprovado nos dois países','Ficção, documentário e animação','Percentuais mínimos de participação de cada país'],
+    url:'https://telefilm.ca',
+    notes:'',
+  },
+  {
+    id:'ffa', name:'FFA – Filmförderungsanstalt',
+    org:'Agência Federal de Fomento ao Cinema da Alemanha',
+    icon:'🇩🇪', status:'bilateral', region:'europe', regions_display:'Alemanha / Brasil',
+    phases:['production','distribution'], formats:['fiction','documentary'],
+    grant:'Variável', grantNum:400000,
+    deadline:'Via acordo bilateral', deadlineUrgency:'cool',
+    countries:['Brasil','Alemanha'],
+    desc:'O Brasil tem Acordo Bilateral de Co-produção com a Alemanha, operacionalizado pela FFA. Co-produções Brasil-Alemanha podem combinar incentivos da FFA com os recursos do FSA.',
+    eligibility:['Co-produção entre empresa alemã e brasileira','Reconhecimento como Deutsch-Brasilianische Koproduktion','Longas e documentários criativos','Acesso combinado FFA + Länder'],
+    url:'https://www.ffa.de',
+    notes:'',
+  },
+  {
+    id:'hot-docs', name:'Hot Docs Forum',
+    org:'Hot Docs Canadian International Documentary Festival',
+    icon:'🔥', status:'open', region:'americas', regions_display:'Canadá / Global',
+    phases:['production'], formats:['documentary'],
+    grant:'Até $50.000 CAD', grantNum:35000,
+    deadline:'Inscrições: jan–fev/ano', deadlineUrgency:'cool',
+    countries:['Global (inclui Brasil)'],
+    desc:'Um dos principais pitching markets de documentários do mundo. Projetos selecionados têm acesso direto a financiadores, distribuidores e broadcasters internacionais.',
+    eligibility:['Documentários de qualquer país','Projetos em desenvolvimento avançado ou produção','Processo seletivo competitivo','Networking com financiadores internacionais'],
+    url:'https://hotdocs.ca/programmes/forum',
+    notes:'',
+  },
+  {
+    id:'cine-construccion', name:'Cine en Construcción',
+    org:'Festival San Sebastián / Toulouse Cinélatino',
+    icon:'🎥', status:'open', region:'europe', regions_display:'Espanha / França',
+    phases:['post'], formats:['fiction','documentary'],
+    grant:'Serviços + €20.000', grantNum:20000,
+    deadline:'Chamadas anuais', deadlineUrgency:'cool',
+    countries:['Brasil','América Latina'],
+    desc:'Fundo de pós-produção para filmes latino-americanos em finalização. Oferece prêmios em serviços de pós (sound design, color grading, DCP) e acesso a distribuidores europeus.',
+    eligibility:['Longas latino-americanos em fase de pós','Ficção e documentário com mín. 60% filmados','Apresentação de obra em corte aproximado','Co-produção com Europa aumenta chances'],
+    url:'https://www.sansebastianfestival.com/cine_en_construccion',
+    notes:'',
+  },
+  {
+    id:'kocca', name:'KOCCA – Korea Creative Content Agency',
+    org:'Governo da Coreia do Sul',
+    icon:'🇰🇷', status:'closing', region:'asia', regions_display:'Coreia do Sul / Brasil',
+    phases:['development','production'], formats:['fiction','series','animation'],
+    grant:'Em negociação', grantNum:0,
+    deadline:'Acordo em negociação', deadlineUrgency:'warm',
+    countries:['Brasil','Coreia do Sul'],
+    desc:'A KOCCA abriu seu primeiro escritório latino-americano em São Paulo. Foco em co-produções de ficção, séries e animação. Acordo bilateral em negociação com potencial de editais formais a partir de 2026.',
+    eligibility:['Produtoras brasileiras e sul-coreanas','Projetos de ficção, séries e animação','Escritório KOCCA em SP faz matchmaking','Acordo formal ainda em desenvolvimento'],
+    url:'https://www.kocca.kr',
+    notes:'Escritório inaugurado em São Paulo em 2024/2025.',
+  },
+  {
+    id:'mercosul', name:'Acordo Audiovisual do Mercosul',
+    org:'RECAM – Reunião Especializada de Autoridades Cinematográficas',
+    icon:'🤝', status:'open', region:'americas', regions_display:'Mercosul',
+    phases:['production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'FSA + reciprocidade regional', grantNum:0,
+    deadline:'Em vigor desde 2024', deadlineUrgency:'cool',
+    countries:['Brasil','Argentina','Uruguai','Paraguai'],
+    desc:'Acordo de Co-produção Audiovisual do Mercosul assinado em julho de 2024. Facilita o reconhecimento mútuo de co-produções e o acesso cruzado a incentivos de cada país membro.',
+    eligibility:['Produtoras de países membros do Mercosul','Co-produção obrigatória entre ao menos 2 membros','Reconhecimento automático como obra nacional','Acesso aos fundos nacionais (FSA, INCAA, etc.)'],
+    url:'https://www.recam.org',
+    notes:'Assinado em julho de 2024 — em vigor.',
+  },
+  {
+    id:'nigeria', name:'Brasil–Nigéria: Acordo de Co-produção',
+    org:'Secretaria do Audiovisual / NFVCB',
+    icon:'🇳🇬', status:'bilateral', region:'africa', regions_display:'Brasil / Nigéria',
+    phases:['production'], formats:['fiction','series'],
+    grant:'A definir', grantNum:0,
+    deadline:'Em elaboração / negociação', deadlineUrgency:'warm',
+    countries:['Brasil','Nigéria'],
+    desc:'Acordo bilateral em elaboração com a Nigéria (NFVCB). Marco histórico de cooperação Sul-Sul, abrindo acesso ao ecossistema Nollywood — a maior indústria cinematográfica africana — para produtoras brasileiras.',
+    eligibility:['Produtoras brasileiras e nigerianas','Projetos de ficção e séries','Potencial de acesso à rede Nollywood','Editais formais a serem definidos após internalização'],
+    url:'https://braziliancontent.com/en/market/co-production-agreements/',
+    notes:'Primeiro acordo cinematográfico Brasil–África negra. Internalização pendente.',
+  },
+
+  // ── NOVOS (adicionados via análise do docx) ──────────────────────────────
+
+  {
+    id:'fsa-internacional', name:'FSA – Chamada de Co-produções Internacionais',
+    org:'Fundo Setorial do Audiovisual / ANCINE / BRDE',
+    icon:'🇧🇷', status:'open', region:'americas', regions_display:'Brasil / Internacional',
+    phases:['production'], formats:['fiction','documentary','animation'],
+    grant:'R$ 120 milhões (edital 2023/24)', grantNum:500000,
+    deadline:'Chamadas anuais — BRDE/ANCINE', deadlineUrgency:'cool',
+    countries:['Brasil','+ 40 países parceiros'],
+    desc:'Principal mecanismo público brasileiro para co-produções internacionais. O edital 2023/24 destinou R$ 120 milhões a longas de ficção, documentário e animação em regime de co-produção internacional. Em 2022 foram R$ 40 milhões, com 40% obrigatórios para Norte, Nordeste e Centro-Oeste.',
+    eligibility:['Produtoras brasileiras com projeto de co-produção internacional','Longas de ficção, animação e documentário','Reconhecimento Provisório de Co-produção (RPCI) emitido pela ANCINE','Percentual mínimo de 20–80% conforme o tratado aplicável'],
+    url:'https://www.gov.br/ancine/pt-br',
+    notes:'Eixo central do fomento: combina recursos do FSA com incentivos do país parceiro.',
+  },
+  {
+    id:'bfi', name:'BFI – British Film Institute / Global Screen Fund',
+    org:'British Film Institute – Governo do Reino Unido',
+    icon:'🇬🇧', status:'bilateral', region:'europe', regions_display:'Reino Unido / Brasil',
+    phases:['development','production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'Variável (BFI + incentivos regionais)', grantNum:350000,
+    deadline:'Via acordo bilateral (atualizado 2022)', deadlineUrgency:'cool',
+    countries:['Brasil','Reino Unido'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com o Reino Unido, atualizado em 2022 (cinema e TV). Co-produções oficiais podem acessar o BFI International Fund, o Global Screen Fund e incentivos regionais britânicos (Film4, Screen Scotland, Creative Wales etc.).',
+    eligibility:['Co-produção entre empresa britânica e brasileira','Participação de 20–80% de cada coprodutor','Elenco e equipe com nacionalidade ou residência nos países parceiros','Reconhecimento pela BFI e pela ANCINE antes das filmagens'],
+    url:'https://www.bfi.org.uk',
+    notes:'Acordo atualizado em 2022 — abrange cinema e televisão.',
+  },
+  {
+    id:'aide-cnc', name:'Aide aux Cinémas du Monde',
+    org:'CNC – Centre National du Cinéma / Institut Français',
+    icon:'🎭', status:'open', region:'europe', regions_display:'França / Global',
+    phases:['production','post'], formats:['fiction','documentary'],
+    grant:'Subsídio seletivo', grantNum:100000,
+    deadline:'Chamadas anuais do CNC', deadlineUrgency:'cool',
+    countries:['Brasil','França','Global'],
+    desc:'Fundo seletivo gerido pelo CNC e pelo Institut Français. Concede subsídios a longas-metragens estrangeiros com co-produtor francês, antes ou depois da conclusão do projeto. O acordo Brasil–França permite que co-produções brasileiras com produtor francês acessem esse fundo diretamente.',
+    eligibility:['Projeto deve ter co-produtor francês','Longas-metragens de ficção e documentário','Subsídio concedido antes ou após a conclusão','Obra deve ter potencial de circulação internacional'],
+    url:'https://www.cnc.fr/professionnels/aides/aides-aux-cinemas-du-monde',
+    notes:'Separado do fundo bilateral CNC — linha específica para obras internacionais.',
+  },
+  {
+    id:'south-africa-nfvf', name:'Spcine × NFVF Co-Development Fund',
+    org:'Spcine (São Paulo) / National Film and Video Foundation (África do Sul)',
+    icon:'🇿🇦', status:'open', region:'africa', regions_display:'Brasil / África do Sul',
+    phases:['development'], formats:['fiction','documentary'],
+    grant:'~US$ 20.000 / projeto', grantNum:20000,
+    deadline:'Edital anunciado 2024/25', deadlineUrgency:'warm',
+    countries:['Brasil','África do Sul'],
+    desc:'Iniciativa de co-desenvolvimento entre a Spcine e a NFVF da África do Sul. Seleciona 4 projetos em fase de desenvolvimento, concedendo cerca de US$ 20 mil a cada um. Conecta produtores brasileiros e sul-africanos. O acordo Brasil–África do Sul foi aprovado pelo Congresso em 2023.',
+    eligibility:['Produtoras de São Paulo (Brasil) e da África do Sul','Projetos em fase de desenvolvimento','Ficção e documentário','Seleção conjunta Spcine/NFVF'],
+    url:'https://www.nfvf.co.za',
+    notes:'Acordo bilateral Brasil–África do Sul aprovado pelo Congresso brasileiro em 2023.',
+  },
+  {
+    id:'new-zealand', name:'Brasil–Nova Zelândia: Acordo de Co-produção',
+    org:'Secretaria do Audiovisual / New Zealand Film Commission',
+    icon:'🇳🇿', status:'bilateral', region:'global', regions_display:'Brasil / Nova Zelândia',
+    phases:['production'], formats:['fiction','documentary','animation'],
+    grant:'FSA + incentivos da NZFC', grantNum:0,
+    deadline:'Assinado em 4 mar 2026 — em vigor', deadlineUrgency:'cool',
+    countries:['Brasil','Nova Zelândia'],
+    desc:'Acordo de Co-produção Audiovisual assinado em 4 de março de 2026. As obras reconhecidas serão tratadas como nacionais nos dois países. Cada co-produtor deve aportar entre 20% e 80% do orçamento (mínimo de 10% em casos excepcionais). Aprovação prévia das autoridades competentes obrigatória.',
+    eligibility:['Co-produção entre empresa neozelandesa e brasileira','Participação de 20–80% de cada coprodutor (mín. 10% em casos excepcionais)','Aprovação das autoridades antes do início das filmagens','Obra reconhecida como nacional nos dois países'],
+    url:'https://www.nzfilm.co.nz',
+    notes:'Acordo mais recente do Brasil — assinado em março de 2026.',
+  },
+  {
+    id:'acordo-latino', name:'Acordo Latino-Americano de Co-Produção Cinematográfica',
+    org:'CAACI / Países signatários',
+    icon:'🌎', status:'open', region:'americas', regions_display:'América Latina / Espanha',
+    phases:['production','distribution'], formats:['fiction','documentary'],
+    grant:'Acesso aos fundos nacionais de cada signatário', grantNum:0,
+    deadline:'Vigente — tratado multilateral', deadlineUrgency:'cool',
+    countries:['Argentina','Bolívia','Brasil','Colômbia','Costa Rica','Cuba','Equador','República Dominicana','México','Nicarágua','Panamá','Peru','Espanha','Uruguai','Venezuela'],
+    desc:'Acordo multilateral que permite co-produções de cinema e televisão entre 15 países latino-americanos e Espanha. As obras são tratadas como nacionais em todos os países signatários. Participação entre 20–80%. Distinto do Ibermedia (que é um fundo) e do Mercosul (que é um bloco).',
+    eligibility:['Produtoras de países signatários do acordo','Participação de 20–80% de cada coprodutor','Reconhecimento como obra nacional em todos os países co-produtores','Acesso combinado aos fundos nacionais (FSA, INCAA, IMCINE etc.)'],
+    url:'https://braziliancontent.com/en/market/co-production-agreements/',
+    notes:'Instrumento distinto do Ibermedia e do Acordo Mercosul.',
+  },
+  {
+    id:'incaa', name:'INCAA – Instituto Nacional de Cine y Artes Audiovisuales',
+    org:'Gobierno de Argentina',
+    icon:'🇦🇷', status:'bilateral', region:'americas', regions_display:'Argentina / Brasil',
+    phases:['development','production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'Variável (programa nacional + bilateral)', grantNum:150000,
+    deadline:'Via acordo bilateral + editais INCAA', deadlineUrgency:'cool',
+    countries:['Brasil','Argentina'],
+    desc:'O Brasil mantém Acordo Bilateral de Co-produção com a Argentina (vigente). O INCAA oferece apoio financeiro a co-produções no âmbito do acordo bilateral e do Acordo Latino-Americano. As obras reconhecidas recebem tratamento nacional nos dois países.',
+    eligibility:['Co-produção entre empresa argentina e brasileira','Participação de 20–80% de cada coprodutor','Reconhecimento pelo INCAA e pela ANCINE','Elenco e equipe de ambos os países'],
+    url:'https://www.incaa.gob.ar',
+    notes:'Argentina é o maior parceiro histórico do cinema brasileiro em co-produções.',
+  },
+  {
+    id:'icaa', name:'ICAA – Instituto de la Cinematografía y de las Artes Audiovisuales',
+    org:'Ministerio de Cultura de España',
+    icon:'🇪🇸', status:'bilateral', region:'europe', regions_display:'Espanha / Brasil',
+    phases:['development','production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'Variável (editais ICAA + bilateral)', grantNum:200000,
+    deadline:'Via acordo bilateral + editais anuais', deadlineUrgency:'cool',
+    countries:['Brasil','Espanha'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com a Espanha (vigente). O ICAA administra os programas de apoio à co-produção internacional espanhola. Espanha também é signatária do Acordo Latino-Americano, ampliando as possibilidades de co-produção multilateral.',
+    eligibility:['Co-produção entre empresa espanhola e brasileira','Participação de 20–80% de cada coprodutor','Elenco e equipe de ambos os países','Acesso combinado ao ICAA e ao FSA'],
+    url:'https://www.culturaydeporte.gob.es/cultura/cine/icaa',
+    notes:'Espanha é signatária do Acordo Latino-Americano — acesso multilateral disponível.',
+  },
+  {
+    id:'sorfond', name:'Sørfond – Norwegian Film Fund',
+    org:'Norwegian Film Institute / Noruega',
+    icon:'🇳🇴', status:'open', region:'europe', regions_display:'Noruega / Global Sul',
+    phases:['development','production'], formats:['fiction','documentary'],
+    grant:'Até NOK 1,5M (~€130.000)', grantNum:130000,
+    deadline:'Chamadas anuais', deadlineUrgency:'cool',
+    countries:['Brasil','América Latina','África','Ásia','Europa Oriental'],
+    desc:'Fundo norueguês para co-produções entre a Noruega e países do Sul Global. Apoia longas de ficção e documentários com co-produtor norueguês. O Brasil é elegível e produtores brasileiros já receberam apoio. Combina bem com recursos do FSA.',
+    eligibility:['Projeto deve ter co-produtor norueguês','Diretor ou projeto de país do Sul Global','Longas de ficção e documentário','Co-produção oficial com percentual definido'],
+    url:'https://www.nfi.no/english/funding/sorfond',
+    notes:'Mencionado pelo MinC como fundo complementar ao FSA para co-produções.',
+  },
+  {
+    id:'ica-portugal', name:'ICA – Instituto do Cinema e do Audiovisual',
+    org:'Governo de Portugal',
+    icon:'🇵🇹', status:'bilateral', region:'lusophone', regions_display:'Portugal / Brasil',
+    phases:['development','production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'Variável (editais ICA + bilateral)', grantNum:150000,
+    deadline:'Via acordo bilateral + editais anuais', deadlineUrgency:'cool',
+    countries:['Brasil','Portugal'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com Portugal (vigente desde 1981). O ICA publica editais anuais de apoio à produção e co-produção, acessíveis a projetos brasileiros com co-produtor português. Complementa o Programa CPLP Audiovisual.',
+    eligibility:['Co-produção entre empresa portuguesa e brasileira','Participação de 20–80% de cada coprodutor','Elenco e equipe de ambos os países (ou CPLP)','Reconhecimento pelo ICA e pela ANCINE'],
+    url:'https://www.ica-ip.pt',
+    notes:'Portugal é signatário do Acordo Latino-Americano e do CPLP Audiovisual.',
+  },
+  {
+    id:'doha', name:'Doha Film Institute',
+    org:'Doha Film Institute (Catar)',
+    icon:'🇶🇦', status:'open', region:'global', regions_display:'Catar / Global',
+    phases:['development','production'], formats:['fiction','documentary'],
+    grant:'Até US$ 50.000', grantNum:50000,
+    deadline:'Chamadas anuais', deadlineUrgency:'cool',
+    countries:['Brasil','Global (países em desenvolvimento)'],
+    desc:'O Doha Film Institute financia projetos de longas-metragem de ficção e documentário de países em desenvolvimento, incluindo o Brasil. Não exige co-produção com o Catar. Mencionado pelo MinC como fundo internacional complementar ao FSA.',
+    eligibility:['Realizadores de países em desenvolvimento (inclui Brasil)','Longas de ficção e documentário','Projetos em desenvolvimento ou produção','Sem exigência de co-produtor catariano'],
+    url:'https://www.dohafilminstitute.com',
+    notes:'Fundo privado sem fins lucrativos — combina bem com recursos do FSA.',
+  },
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let activeFilters = { status:'all', region:'all', phase:'all', format:'all' };
+let searchQuery = '';
+let currentView = 'grid';
+
+function getFiltered() {
+  const sort = document.getElementById('sortSelect').value;
+  let list = funds.filter(f => {
+    const ms = activeFilters.status === 'all' || f.status === activeFilters.status;
+    const mr = activeFilters.region === 'all' || f.region === activeFilters.region;
+    const mp = activeFilters.phase === 'all' || f.phases.includes(activeFilters.phase);
+    const mf = activeFilters.format === 'all' || f.formats.includes(activeFilters.format);
+    const q  = searchQuery.toLowerCase();
+    const mq = !q || f.name.toLowerCase().includes(q) || f.org.toLowerCase().includes(q)
+               || f.desc.toLowerCase().includes(q) || f.countries.some(c=>c.toLowerCase().includes(q));
+    return ms && mr && mp && mf && mq;
+  });
+  const ord = { open:0, closing:1, bilateral:2, closed:3 };
+  if (sort==='status') list.sort((a,b)=>(ord[a.status]??9)-(ord[b.status]??9));
+  else if (sort==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if (sort==='grant') list.sort((a,b)=>b.grantNum-a.grantNum);
+  return list;
+}
+
+function toggleFilter(el) {
+  const type = el.dataset.filter, val = el.dataset.value;
+  activeFilters[type] = val;
+  // sync all elements with same filter (sidebar + mobile bar)
+  document.querySelectorAll(`[data-filter="${type}"]`).forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll(`[data-filter="${type}"][data-value="${val}"]`).forEach(e=>e.classList.add('active'));
+  renderCards(); renderChips();
+}
+
+function mfToggle(el) {
+  // delegate to same logic as sidebar
+  toggleFilter(el);
+}
+
+function renderChips() {
+  const row = document.getElementById('activeFiltersRow');
+  const chips = [];
+  if (activeFilters.status !== 'all') chips.push({label:activeFilters.status, f:'status'});
+  if (activeFilters.region !== 'all') chips.push({label:activeFilters.region, f:'region'});
+  if (activeFilters.phase  !== 'all') chips.push({label:activeFilters.phase,  f:'phase'});
+  if (activeFilters.format !== 'all') chips.push({label:activeFilters.format, f:'format'});
+  if (searchQuery) chips.push({label:`"${searchQuery}"`, f:'search'});
+  row.innerHTML = chips.map(c=>`
+    <div class="filter-chip" onclick="removeFilter('${c.f}')">
+      ${c.label} <span class="chip-x">×</span>
+    </div>`).join('');
+}
+
+function removeFilter(type) {
+  if (type==='search') { searchQuery=''; document.getElementById('mainSearch').value=''; }
+  else {
+    activeFilters[type]='all';
+    document.querySelectorAll(`[data-filter="${type}"]`).forEach(e=>e.classList.remove('active'));
+    document.querySelector(`[data-filter="${type}"][data-value="all"]`)?.classList.add('active');
+  }
+  renderCards(); renderChips();
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+const phaseLabel = {development:'Desenvolvimento',production:'Produção',post:'Pós-produção',distribution:'Distribuição',training:'Formação'};
+const phaseClass = {development:'phase-dev',production:'phase-prod',post:'phase-post',distribution:'phase-dist',training:'phase-form'};
+const statusLabel = {open:'Aberto',closing:'Encerrando',closed:'Encerrado',bilateral:'Bilateral'};
+
+function renderCards() {
+  const list  = getFiltered();
+  const grid  = document.getElementById('cardsGrid');
+  const empty = document.getElementById('emptyState');
+  document.getElementById('resultsCount').textContent = list.length;
+
+  if (!list.length) { grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+  grid.style.gridTemplateColumns = currentView==='list' ? '1fr' : '';
+
+  grid.innerHTML = list.map(f=>`
+    <div class="fund-card status-${f.status}" onclick="openModal('${f.id}')">
+      <div class="card-accent-bar"></div>
+      <div class="card-top">
+        <span class="card-icon">${f.icon}</span>
+        <span class="status-badge status-${f.status}">${statusLabel[f.status]}</span>
+      </div>
+      <div>
+        <div class="card-name">${f.name}</div>
+        <div class="card-org">${f.org}</div>
+      </div>
+      <p class="card-desc">${f.desc}</p>
+      <div class="card-tags">
+        ${f.phases.map(p=>`<span class="phase-tag ${phaseClass[p]}">${phaseLabel[p]}</span>`).join('')}
+      </div>
+      <div class="card-meta">
+        <div>
+          <div class="meta-label">Grant / Apoio</div>
+          <div class="meta-value ${f.grantNum>0?'amber':''}">${f.grant}</div>
+        </div>
+        <div>
+          <div class="meta-label">Prazo</div>
+          <div class="meta-value ${f.deadlineUrgency==='warm'?'yellow':''}">${f.deadline}</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-region">${f.regions_display}</span>
+        <span class="card-cta">Ver detalhes →</span>
+      </div>
+    </div>`).join('');
+
+  updateCounts();
+}
+
+function updateCounts() {
+  const c = {all:funds.length,open:0,closing:0,bilateral:0,closed:0};
+  funds.forEach(f=>{ if(c[f.status]!==undefined) c[f.status]++; });
+  ['All','Open','Closing','Bilateral','Closed'].forEach(k=>{
+    const el = document.getElementById('count'+k);
+    if(el) el.textContent = c[k.toLowerCase()];
+  });
+  document.getElementById('statOpen').textContent = c.open;
+  document.getElementById('statTotal').textContent = funds.length;
+  document.getElementById('statClosing').textContent = c.closing;
+}
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function openModal(id) {
+  const f = funds.find(x=>x.id===id);
+  if(!f) return;
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="modal-icon">${f.icon}</div>
+      <div class="modal-title">${f.name}</div>
+      <div class="modal-subtitle">${f.org}</div>
+      <span class="modal-status status-badge status-${f.status}">${statusLabel[f.status]}</span>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">${f.desc}</p>
+
+      <div>
+        <div class="modal-section-title">Dados Principais</div>
+        <div class="info-grid">
+          <div class="info-box">
+            <div class="info-box-label">Grant / Apoio</div>
+            <div class="info-box-value ${f.grantNum>0?'amber':''}">${f.grant}</div>
+          </div>
+          <div class="info-box">
+            <div class="info-box-label">Região</div>
+            <div class="info-box-value">${f.regions_display}</div>
+          </div>
+          <div class="info-box">
+            <div class="info-box-label">Prazo / Chamadas</div>
+            <div class="info-box-value">${f.deadline}</div>
+          </div>
+          <div class="info-box">
+            <div class="info-box-label">Formatos</div>
+            <div class="info-box-value">${f.formats.map(x=>({fiction:'Ficção',documentary:'Documentário',animation:'Animação',series:'Séries'}[x]||x)).join(', ')}</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="modal-section-title">Fases Apoiadas</div>
+        <div class="phases-row">
+          ${f.phases.map(p=>`<span class="phase-tag ${phaseClass[p]}">${phaseLabel[p]}</span>`).join('')}
+        </div>
+      </div>
+
+      <div>
+        <div class="modal-section-title">Elegibilidade</div>
+        <ul class="eligibility-list">
+          ${f.eligibility.map(e=>`<li>${e}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div>
+        <div class="modal-section-title">Países Parceiros</div>
+        <div class="countries-list">
+          ${f.countries.map(c=>`<span class="country-tag">${c}</span>`).join('')}
+        </div>
+      </div>
+
+      ${f.notes?`<div class="note-box"><p><strong>Nota</strong>${f.notes}</p></div>`:''}
+
+      <div class="modal-actions">
+        <button class="btn-modal-primary" onclick="window.open('${f.url}','_blank')">Acessar Site Oficial ↗</button>
+        <button class="btn-modal-secondary" onclick="closeModal()">Fechar</button>
+      </div>
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function openFundById(id) { openModal(id); }
+function closeModal(e) {
+  if(e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+// ─── SUGGEST FUND ───────────────────────────────────────────
+function showAddFundModal() {
+  // Reset form
+  ['sf-url','sf-name','sf-org','sf-grant','sf-deadline','sf-notes'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  ['sf-phase-dev','sf-phase-prod','sf-phase-post','sf-phase-dist','sf-phase-train',
+   'sf-fmt-fic','sf-fmt-doc','sf-fmt-ani','sf-fmt-ser'].forEach(id => {
+    document.getElementById(id).checked = false;
+  });
+  document.getElementById('sf-region').value = 'global';
+  document.getElementById('sf-status').value = 'open';
+  document.getElementById('sf-url').classList.remove('error');
+  document.getElementById('sf-url-err').classList.remove('show');
+  // Show
+  document.getElementById('suggestOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('sf-url').focus(), 200);
+}
+
+function closeSuggestModal(e) {
+  if (e && e.target !== document.getElementById('suggestOverlay')) return;
+  document.getElementById('suggestOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function submitSuggestFund() {
+  const urlEl = document.getElementById('sf-url');
+  const urlVal = urlEl.value.trim();
+  const errEl = document.getElementById('sf-url-err');
+  // Validate URL
+  if (!urlVal || !/^https?:\/\/.+/.test(urlVal)) {
+    urlEl.classList.add('error');
+    errEl.classList.add('show');
+    urlEl.focus();
+    return;
+  }
+  urlEl.classList.remove('error');
+  errEl.classList.remove('show');
+
+  const phases = ['sf-phase-dev','sf-phase-prod','sf-phase-post','sf-phase-dist','sf-phase-train']
+    .filter(id => document.getElementById(id).checked)
+    .map(id => document.getElementById(id).value);
+  const formats = ['sf-fmt-fic','sf-fmt-doc','sf-fmt-ani','sf-fmt-ser']
+    .filter(id => document.getElementById(id).checked)
+    .map(id => document.getElementById(id).value);
+
+  const rawName = document.getElementById('sf-name').value.trim();
+  const rawGrant = document.getElementById('sf-grant').value.trim();
+
+  const newFund = {
+    id: 'user-' + Date.now(),
+    name: rawName || 'Fundo sugerido',
+    org: document.getElementById('sf-org').value.trim() || 'Não informado',
+    icon: '🔖',
+    status: document.getElementById('sf-status').value,
+    region: document.getElementById('sf-region').value,
+    regions_display: document.getElementById('sf-region').options[document.getElementById('sf-region').selectedIndex].text,
+    phases: phases.length ? phases : ['production'],
+    formats: formats.length ? formats : ['fiction'],
+    grant: rawGrant || '—',
+    grantNum: parseFloat(rawGrant.replace(/[^0-9]/g,'')) || 0,
+    deadline: document.getElementById('sf-deadline').value.trim() || 'Consultar edital',
+    deadlineUrgency: 'cool',
+    countries: ['Brasil'],
+    desc: 'Fundo sugerido pela comunidade ARTIS. Acesse o link para informações completas.',
+    eligibility: ['Consultar edital oficial no link indicado'],
+    url: urlVal,
+    notes: document.getElementById('sf-notes').value.trim(),
+    userAdded: true,
+  };
+
+  // Push to live array
+  funds.push(newFund);
+
+  // Persist in localStorage
+  try {
+    const saved = JSON.parse(localStorage.getItem('artis_user_funds') || '[]');
+    saved.push(newFund);
+    localStorage.setItem('artis_user_funds', JSON.stringify(saved));
+  } catch(e) {}
+
+  // Close & re-render
+  document.getElementById('suggestOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+  renderCards();
+  showToast('✓ Fundo adicionado à sua base local');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+// ────────────────────────────────────────────────────────────
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('viewGrid').classList.toggle('active', v==='grid');
+  document.getElementById('viewList').classList.toggle('active', v==='list');
+  renderCards();
+}
+
+document.getElementById('mainSearch').addEventListener('input', function() {
+  searchQuery = this.value.trim();
+  renderCards(); renderChips();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') {
+    document.getElementById('modalOverlay').classList.remove('visible');
+    document.getElementById('suggestOverlay').classList.remove('visible');
+    document.body.style.overflow='';
+  }
+});
+
+// Restore user-added funds from localStorage
+try {
+  const saved = JSON.parse(localStorage.getItem('artis_user_funds') || '[]');
+  if (saved.length) {
+    const existingIds = new Set(funds.map(f => f.id));
+    saved.forEach(f => { if (!existingIds.has(f.id)) funds.push(f); });
+  }
+} catch(e) {}
+
+renderCards();
+</script>
+</body>
+</html>
