@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -620,6 +620,21 @@
     .hero-left h1 { font-size: 64px; }
     .cards-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
   }
+
+  /* ─── LANGUAGE TOGGLE ─── */
+  .lang-toggle {
+    display: flex; align-items: center; gap: 0;
+    border: 1px solid var(--gray-600); overflow: hidden; flex-shrink: 0;
+  }
+  .lang-btn {
+    background: transparent; border: none; color: var(--gray-400);
+    padding: 5px 10px; font-size: 10px; font-family: inherit; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .lang-btn.active { background: var(--white); color: var(--black); }
+  .lang-btn:hover:not(.active) { color: var(--white); }
+  .lang-sep { width: 1px; background: var(--gray-600); align-self: stretch; }
 </style>
 </head>
 <body>
@@ -632,18 +647,18 @@
       <div class="artis-mark sz-md on-dark">
         <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
       </div>
-      <div class="lock-brand-tagline">Fundos Audiovisuais</div>
+      <div class="lock-brand-tagline" id="lockTagline">Audiovisual Funds</div>
     </div>
 
     <div class="lock-brand-mid">
       <div class="lock-brand-headline">
-        <strong>28 fundos</strong> mapeados<br>
-        <strong>37 países</strong> parceiros<br>
-        <strong>€ 120M+</strong> disponíveis<br>
+        <strong>28 funds</strong> mapped<br>
+        <strong>37 countries</strong> partners<br>
+        <strong>€ 120M+</strong> available<br>
       </div>
       <div class="lock-brand-rule"></div>
       <div class="lock-brand-desc">
-        Mapeamento atualizado de fundos internacionais, acordos bilaterais e linhas de co-produção acessíveis a projetos audiovisuais brasileiros.
+        Updated map of international funds, bilateral agreements and co-production lines accessible to Brazilian audiovisual projects.
       </div>
     </div>
 
@@ -658,14 +673,14 @@
       </div>
     </div>
     <div class="lock-form-inner">
-      <div class="lock-access-label">Acesso Privado</div>
+      <div class="lock-access-label" id="lockAccessLabel">Private Access</div>
       <div class="lock-input-wrap">
-        <label class="lock-input-label" for="lockPass">Senha</label>
+        <label class="lock-input-label" id="lockPassLabel" for="lockPass">Password</label>
         <input class="lock-input" id="lockPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')unlock()">
         <div class="lock-error" id="lockError"></div>
       </div>
-      <button class="lock-btn" onclick="unlock()">Entrar →</button>
-      <div class="lock-form-foot">Acesso restrito</div>
+      <button class="lock-btn" id="lockBtn" onclick="unlock()">Enter →</button>
+      <div class="lock-form-foot" id="lockFoot">Restricted access</div>
     </div>
   </div>
 </div>
@@ -678,15 +693,15 @@
         <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
       </span>
       <span style="width:1px;height:20px;background:var(--gray-600);margin:0 14px;flex-shrink:0;"></span>
-      <span style="font-size:10px;font-weight:300;color:var(--gray-400);letter-spacing:4px;text-transform:uppercase;">Fundos AV</span>
+      <span id="headerSub" style="font-size:10px;font-weight:300;color:var(--gray-400);letter-spacing:4px;text-transform:uppercase;">AV FUNDS</span>
     </a>
     <div class="header-search">
       <span class="search-icon">↗</span>
-      <input type="text" id="mainSearch" placeholder="Buscar fundo, país, fase..." autocomplete="off">
+      <input type="text" id="mainSearch" id="mainSearchInput" placeholder="Search fund, country, phase..." autocomplete="off">
     </div>
     <div class="header-actions">
-      <span class="live-dot">Ao vivo</span>
-      <button class="btn-primary" onclick="showAddFundModal()">+ Sugerir Fundo</button>
+      <span class="live-dot" id="liveDot">Live</span>
+      <div class="lang-toggle"><button class="lang-btn active" id="btnEN" onclick="setLang('en')">EN</button><div class="lang-sep"></div><button class="lang-btn" id="btnPT" onclick="setLang('pt')">PT</button></div><button class="btn-primary" id="btnSuggestFund" onclick="showAddFundModal()">+ Suggest Fund</button>
     </div>
   </div>
 </header>
@@ -701,25 +716,25 @@
   </div>
   <div class="hero-inner">
     <div class="hero-left">
-      <h1>RADAR<br>DE FUNDOS<br><span>AUDIOVISUAIS</span></h1>
-      <p>Mapeamento atualizado de fundos internacionais e acordos de co-produção com parceria para projetos brasileiros.</p>
+      <h1 id="heroTitle">AUDIOVISUAL<br>FUNDS<br><span>RADAR</span></h1>
+      <p id="heroDesc">Updated map of international funds and co-production agreements available for Brazilian projects.</p>
     </div>
     <div class="stats-row">
       <div class="stat-box">
         <span class="stat-num amber" id="statOpen">—</span>
-        <span class="stat-lbl">Fundos abertos</span>
+        <span class="stat-lbl" id="lblOpen">Open funds</span>
       </div>
       <div class="stat-box">
         <span class="stat-num" id="statTotal">—</span>
-        <span class="stat-lbl">Total mapeado</span>
+        <span class="stat-lbl" id="lblTotal">Total mapped</span>
       </div>
       <div class="stat-box">
         <span class="stat-num" id="statCountries">37</span>
-        <span class="stat-lbl">Países parceiros</span>
+        <span class="stat-lbl" id="lblCountries">Partner countries</span>
       </div>
       <div class="stat-box">
         <span class="stat-num" id="statClosing">—</span>
-        <span class="stat-lbl">Encerrando em breve</span>
+        <span class="stat-lbl" id="lblClosing">Closing soon</span>
       </div>
     </div>
   </div>
@@ -728,38 +743,38 @@
 <!-- FEATURED -->
 <div class="featured-wrap" style="margin-top:0">
   <div class="featured-banner">
-    <span class="featured-label">Atualizado 2026</span>
+    <span class="featured-label" id="featLabel">Updated 2026</span>
     <div class="featured-text">
-      <h3>28 fundos · 37 países · €120M+ disponíveis</h3>
-      <p>Acordos bilaterais, fundos nacionais e linhas internacionais para co-produção brasileira.</p>
+      <h3 id="featTitle">28 funds · 37 countries · €120M+ available</h3>
+      <p id="featDesc">Bilateral agreements, national funds and international co-production lines for Brazilian projects.</p>
     </div>
-    <button class="featured-cta" onclick="openFundById('fsa-internacional')">Ver FSA →</button>
+    <button class="featured-cta" id="featCta" onclick="openFundById('fsa-internacional')">See FSA →</button>
   </div>
 </div>
 
 <!-- MOBILE FILTER BAR (hidden on desktop, visible < 1024px) -->
 <div class="mobile-filters" id="mobileFilters">
   <div class="mf-group">
-    <button class="mf-btn active" data-filter="status" data-value="all" onclick="mfToggle(this)">Todos</button>
-    <button class="mf-btn" data-filter="status" data-value="open" onclick="mfToggle(this)">Abertos</button>
-    <button class="mf-btn" data-filter="status" data-value="closing" onclick="mfToggle(this)">Encerrando</button>
+    <button class="mf-btn active" data-filter="status" data-value="all" onclick="mfToggle(this)">All</button>
+    <button class="mf-btn" data-filter="status" data-value="open" onclick="mfToggle(this)">Open</button>
+    <button class="mf-btn" data-filter="status" data-value="closing" onclick="mfToggle(this)">Closing</button>
     <button class="mf-btn" data-filter="status" data-value="bilateral" onclick="mfToggle(this)">Bilateral</button>
-    <button class="mf-btn" data-filter="status" data-value="closed" onclick="mfToggle(this)">Encerrado</button>
+    <button class="mf-btn" data-filter="status" data-value="closed" onclick="mfToggle(this)">Closed</button>
   </div>
   <div class="mf-group">
-    <button class="mf-btn active" data-filter="region" data-value="all" onclick="mfToggle(this)">Região</button>
-    <button class="mf-btn" data-filter="region" data-value="europe" onclick="mfToggle(this)">Europa</button>
-    <button class="mf-btn" data-filter="region" data-value="americas" onclick="mfToggle(this)">Américas</button>
+    <button class="mf-btn active" data-filter="region" data-value="all" onclick="mfToggle(this)">Region</button>
+    <button class="mf-btn" data-filter="region" data-value="europe" onclick="mfToggle(this)">Europe</button>
+    <button class="mf-btn" data-filter="region" data-value="americas" onclick="mfToggle(this)">Americas</button>
     <button class="mf-btn" data-filter="region" data-value="global" onclick="mfToggle(this)">Global</button>
-    <button class="mf-btn" data-filter="region" data-value="asia" onclick="mfToggle(this)">Ásia</button>
-    <button class="mf-btn" data-filter="region" data-value="africa" onclick="mfToggle(this)">África</button>
-    <button class="mf-btn" data-filter="region" data-value="lusophone" onclick="mfToggle(this)">Lusofonia</button>
+    <button class="mf-btn" data-filter="region" data-value="asia" onclick="mfToggle(this)">Asia</button>
+    <button class="mf-btn" data-filter="region" data-value="africa" onclick="mfToggle(this)">Africa</button>
+    <button class="mf-btn" data-filter="region" data-value="lusophone" onclick="mfToggle(this)">Lusophone</button>
   </div>
   <div class="mf-group">
-    <button class="mf-btn active" data-filter="phase" data-value="all" onclick="mfToggle(this)">Fase</button>
+    <button class="mf-btn active" data-filter="phase" data-value="all" onclick="mfToggle(this)">Phase</button>
     <button class="mf-btn" data-filter="phase" data-value="development" onclick="mfToggle(this)">Dev</button>
-    <button class="mf-btn" data-filter="phase" data-value="production" onclick="mfToggle(this)">Produção</button>
-    <button class="mf-btn" data-filter="phase" data-value="post" onclick="mfToggle(this)">Pós</button>
+    <button class="mf-btn" data-filter="phase" data-value="production" onclick="mfToggle(this)">Production</button>
+    <button class="mf-btn" data-filter="phase" data-value="post" onclick="mfToggle(this)">Post</button>
     <button class="mf-btn" data-filter="phase" data-value="distribution" onclick="mfToggle(this)">Dist.</button>
   </div>
 </div>
@@ -770,49 +785,49 @@
   <aside class="sidebar">
 
     <div class="filter-block">
-      <div class="filter-title">Status</div>
+      <div class="filter-title" id="ftStatus">Status</div>
       <div class="filter-options">
-        <div class="filter-opt active" data-filter="status" data-value="all" onclick="toggleFilter(this)">Todos <span class="count" id="countAll">—</span></div>
-        <div class="filter-opt" data-filter="status" data-value="open" onclick="toggleFilter(this)">Abertos <span class="count" id="countOpen">—</span></div>
-        <div class="filter-opt" data-filter="status" data-value="closing" onclick="toggleFilter(this)">Encerrando <span class="count" id="countClosing">—</span></div>
-        <div class="filter-opt" data-filter="status" data-value="bilateral" onclick="toggleFilter(this)">Bilateral / Acordo <span class="count" id="countBilateral">—</span></div>
-        <div class="filter-opt" data-filter="status" data-value="closed" onclick="toggleFilter(this)">Encerrado <span class="count" id="countClosed">—</span></div>
+        <div class="filter-opt active" data-filter="status" data-value="all" onclick="toggleFilter(this)">All <span class="count" id="countAll">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="open" onclick="toggleFilter(this)">Open <span class="count" id="countOpen">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="closing" onclick="toggleFilter(this)">Closing <span class="count" id="countClosing">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="bilateral" onclick="toggleFilter(this)">Bilateral <span class="count" id="countBilateral">—</span></div>
+        <div class="filter-opt" data-filter="status" data-value="closed" onclick="toggleFilter(this)">Closed <span class="count" id="countClosed">—</span></div>
       </div>
     </div>
 
     <div class="filter-block">
-      <div class="filter-title">Região</div>
+      <div class="filter-title" id="ftRegion">Region</div>
       <div class="filter-options">
-        <div class="filter-opt active" data-filter="region" data-value="all" onclick="toggleFilter(this)">Todas as regiões</div>
-        <div class="filter-opt" data-filter="region" data-value="europe" onclick="toggleFilter(this)">Europa</div>
-        <div class="filter-opt" data-filter="region" data-value="americas" onclick="toggleFilter(this)">Américas</div>
+        <div class="filter-opt active" data-filter="region" data-value="all" onclick="toggleFilter(this)">All regions</div>
+        <div class="filter-opt" data-filter="region" data-value="europe" onclick="toggleFilter(this)">Europe</div>
+        <div class="filter-opt" data-filter="region" data-value="americas" onclick="toggleFilter(this)">Americas</div>
         <div class="filter-opt" data-filter="region" data-value="global" onclick="toggleFilter(this)">Global</div>
-        <div class="filter-opt" data-filter="region" data-value="asia" onclick="toggleFilter(this)">Ásia</div>
-        <div class="filter-opt" data-filter="region" data-value="africa" onclick="toggleFilter(this)">África</div>
-        <div class="filter-opt" data-filter="region" data-value="lusophone" onclick="toggleFilter(this)">Lusofonia</div>
+        <div class="filter-opt" data-filter="region" data-value="asia" onclick="toggleFilter(this)">Asia</div>
+        <div class="filter-opt" data-filter="region" data-value="africa" onclick="toggleFilter(this)">Africa</div>
+        <div class="filter-opt" data-filter="region" data-value="lusophone" onclick="toggleFilter(this)">Lusophone</div>
       </div>
     </div>
 
     <div class="filter-block">
-      <div class="filter-title">Fase</div>
+      <div class="filter-title" id="ftPhase">Phase</div>
       <div class="filter-options">
-        <div class="filter-opt active" data-filter="phase" data-value="all" onclick="toggleFilter(this)">Todas as fases</div>
-        <div class="filter-opt" data-filter="phase" data-value="development" onclick="toggleFilter(this)">Desenvolvimento</div>
-        <div class="filter-opt" data-filter="phase" data-value="production" onclick="toggleFilter(this)">Produção</div>
-        <div class="filter-opt" data-filter="phase" data-value="post" onclick="toggleFilter(this)">Pós-produção</div>
-        <div class="filter-opt" data-filter="phase" data-value="distribution" onclick="toggleFilter(this)">Distribuição</div>
-        <div class="filter-opt" data-filter="phase" data-value="training" onclick="toggleFilter(this)">Formação</div>
+        <div class="filter-opt active" data-filter="phase" data-value="all" onclick="toggleFilter(this)">All phases</div>
+        <div class="filter-opt" data-filter="phase" data-value="development" onclick="toggleFilter(this)">Development</div>
+        <div class="filter-opt" data-filter="phase" data-value="production" onclick="toggleFilter(this)">Production</div>
+        <div class="filter-opt" data-filter="phase" data-value="post" onclick="toggleFilter(this)">Post-production</div>
+        <div class="filter-opt" data-filter="phase" data-value="distribution" onclick="toggleFilter(this)">Distribution</div>
+        <div class="filter-opt" data-filter="phase" data-value="training" onclick="toggleFilter(this)">Training</div>
       </div>
     </div>
 
     <div class="filter-block">
-      <div class="filter-title">Formato</div>
+      <div class="filter-title" id="ftFormat">Format</div>
       <div class="filter-options">
-        <div class="filter-opt active" data-filter="format" data-value="all" onclick="toggleFilter(this)">Todos os formatos</div>
-        <div class="filter-opt" data-filter="format" data-value="fiction" onclick="toggleFilter(this)">Ficção</div>
-        <div class="filter-opt" data-filter="format" data-value="documentary" onclick="toggleFilter(this)">Documentário</div>
-        <div class="filter-opt" data-filter="format" data-value="animation" onclick="toggleFilter(this)">Animação</div>
-        <div class="filter-opt" data-filter="format" data-value="series" onclick="toggleFilter(this)">Séries</div>
+        <div class="filter-opt active" data-filter="format" data-value="all" onclick="toggleFilter(this)">All formats</div>
+        <div class="filter-opt" data-filter="format" data-value="fiction" onclick="toggleFilter(this)">Fiction</div>
+        <div class="filter-opt" data-filter="format" data-value="documentary" onclick="toggleFilter(this)">Documentary</div>
+        <div class="filter-opt" data-filter="format" data-value="animation" onclick="toggleFilter(this)">Animation</div>
+        <div class="filter-opt" data-filter="format" data-value="series" onclick="toggleFilter(this)">Series</div>
       </div>
     </div>
 
@@ -821,7 +836,7 @@
       <div class="artis-mark on-light" style="font-size:22px; letter-spacing:0.12em; opacity:0.18;">
         <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
       </div>
-      <div style="font-size:9px; color:var(--gray-300); letter-spacing:3px; text-transform:uppercase; margin-top:6px;">Radar de Fundos AV</div>
+      <div id="sidebarCredit" style="font-size:9px; color:var(--gray-300); letter-spacing:3px; text-transform:uppercase; margin-top:6px;">AV Funds Radar</div>
     </div>
 
   </aside>
@@ -830,12 +845,12 @@
   <div class="content">
 
     <div class="toolbar">
-      <span class="results-count"><strong id="resultsCount">0</strong> fundos encontrados</span>
+      <span class="results-count"><strong id="resultsCount">0</strong> <span id="lblFundsFound">funds found</span></span>
       <div id="activeFiltersRow" class="active-filters"></div>
       <select class="sort-select" id="sortSelect" onchange="renderCards()">
-        <option value="status">Ordenar: Status</option>
-        <option value="name">Nome A–Z</option>
-        <option value="grant">Valor do Grant</option>
+        <option value="status" id="sortOptStatus">Sort: Status</option>
+        <option value="name" id="sortOptName">Name A–Z</option>
+        <option value="grant" id="sortOptGrant">Grant Value</option>
       </select>
       <div class="view-toggle">
         <button class="view-btn active" id="viewGrid" onclick="setView('grid')">⊞</button>
@@ -846,7 +861,7 @@
     <div class="cards-grid" id="cardsGrid"></div>
     <div class="empty-state" id="emptyState" style="display:none">
       <div class="icon">◎</div>
-      <h3>Nenhum fundo encontrado</h3>
+      <h3 id="emptyMsg">No funds found</h3>
     </div>
 
   </div>
@@ -857,7 +872,7 @@
   <div class="artis-mark sz-xs on-dark" style="font-size:16px; letter-spacing:0.14em;">
     <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
   </div>
-  <span class="footer-note">Radar de Fundos Audiovisuais Internacionais — Atualizado 2026</span>
+  <span class="footer-note" id="footerNote">International Audiovisual Funds Radar — Updated 2026</span>
 </div>
 
 <!-- MODAL -->
@@ -873,85 +888,85 @@
         <div class="artis-mark on-dark sz-xs" style="font-size:11px; letter-spacing:0.14em; margin-bottom:8px; opacity:0.5;">
           <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
         </div>
-        <h2>Sugerir Fundo</h2>
-        <p>Indique um fundo internacional via link — adicionamos à base.</p>
+        <h2 id="suggestTitle">Suggest Fund</h2>
+        <p id="suggestSubtitle">Submit an international fund via link — we'll add it to the database.</p>
       </div>
       <button class="suggest-close" onclick="closeSuggestModal()">×</button>
     </div>
     <div class="suggest-body">
       <div class="form-field">
-        <label>Link / URL do fundo <span class="req">*</span></label>
-        <input class="form-input" id="sf-url" type="url" placeholder="https://..." autocomplete="off">
-        <span class="form-error-msg" id="sf-url-err">Insira um link válido (https://...)</span>
+        <label><span id="sfUrlLabel">Fund Link / URL</span> <span class="req">*</span></label>
+        <input class="form-input" id="sf-url" type="url" id="sfUrlInput" placeholder="https://..." autocomplete="off">
+        <span class="form-error-msg" id="sf-url-err">Please enter a valid link (https://...)</span>
       </div>
       <div class="form-row">
         <div class="form-field">
-          <label>Nome do fundo</label>
-          <input class="form-input" id="sf-name" type="text" placeholder="Ex: IDFA Bertha Fund" autocomplete="off">
+          <label id="sfNameLabel">Fund Name</label>
+          <input class="form-input" id="sf-name" type="text" placeholder="e.g. IDFA Bertha Fund" autocomplete="off">
         </div>
         <div class="form-field">
-          <label>Organização</label>
-          <input class="form-input" id="sf-org" type="text" placeholder="Ex: IDFA / Bertha Foundation" autocomplete="off">
+          <label id="sfOrgLabel">Organization</label>
+          <input class="form-input" id="sf-org" type="text" placeholder="e.g. IDFA / Bertha Foundation" autocomplete="off">
         </div>
       </div>
       <div class="form-row">
         <div class="form-field">
-          <label>Região</label>
+          <label id="sfRegionLabel">Region</label>
           <select class="form-select" id="sf-region">
-            <option value="global">Global</option>
-            <option value="europe">Europa</option>
-            <option value="americas">Américas</option>
-            <option value="asia">Ásia</option>
-            <option value="africa">África</option>
-            <option value="lusophone">Lusofonia</option>
+            <option value="global" id="sfRgnGlobal">Global</option>
+            <option value="europe" id="sfRgnEurope">Europe</option>
+            <option value="americas" id="sfRgnAmericas">Americas</option>
+            <option value="asia" id="sfRgnAsia">Asia</option>
+            <option value="africa" id="sfRgnAfrica">Africa</option>
+            <option value="lusophone" id="sfRgnLuso">Lusophone</option>
           </select>
         </div>
         <div class="form-field">
-          <label>Status</label>
+          <label id="sfStatusLabel">Status</label>
           <select class="form-select" id="sf-status">
-            <option value="open">Aberto</option>
-            <option value="closing">Encerrando em breve</option>
-            <option value="bilateral">Bilateral / Acordo</option>
-            <option value="closed">Encerrado</option>
+            <option value="open" id="sfStOpen">Open</option>
+            <option value="closing" id="sfStClosing">Closing soon</option>
+            <option value="bilateral" id="sfStBilateral">Bilateral / Agreement</option>
+            <option value="closed" id="sfStClosed">Closed</option>
           </select>
         </div>
       </div>
       <div class="form-field">
-        <label>Fases apoiadas</label>
+        <label id="sfPhasesLabel">Supported Phases</label>
         <div class="form-checkgroup">
-          <label class="check-item"><input type="checkbox" id="sf-phase-dev" value="development"><span>Desenvolvimento</span></label>
-          <label class="check-item"><input type="checkbox" id="sf-phase-prod" value="production"><span>Produção</span></label>
-          <label class="check-item"><input type="checkbox" id="sf-phase-post" value="post"><span>Pós-produção</span></label>
-          <label class="check-item"><input type="checkbox" id="sf-phase-dist" value="distribution"><span>Distribuição</span></label>
-          <label class="check-item"><input type="checkbox" id="sf-phase-train" value="training"><span>Formação</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-dev" value="development"><span id="sfPhaseDev">Development</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-prod" value="production"><span id="sfPhaseProd">Production</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-post" value="post"><span id="sfPhasePost">Post-production</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-dist" value="distribution"><span id="sfPhaseDist">Distribution</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-phase-train" value="training"><span id="sfPhaseTrain">Training</span></label>
         </div>
       </div>
       <div class="form-field">
-        <label>Formatos</label>
+        <label id="sfFormatsLabel">Formats</label>
         <div class="form-checkgroup">
-          <label class="check-item"><input type="checkbox" id="sf-fmt-fic" value="fiction"><span>Ficção</span></label>
-          <label class="check-item"><input type="checkbox" id="sf-fmt-doc" value="documentary"><span>Documentário</span></label>
-          <label class="check-item"><input type="checkbox" id="sf-fmt-ani" value="animation"><span>Animação</span></label>
-          <label class="check-item"><input type="checkbox" id="sf-fmt-ser" value="series"><span>Séries</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-fmt-fic" value="fiction"><span id="sfFmtFic">Fiction</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-fmt-doc" value="documentary"><span id="sfFmtDoc">Documentary</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-fmt-ani" value="animation"><span id="sfFmtAni">Animation</span></label>
+          <label class="check-item"><input type="checkbox" id="sf-fmt-ser" value="series"><span id="sfFmtSer">Series</span></label>
         </div>
       </div>
       <div class="form-row">
         <div class="form-field">
-          <label>Valor do grant</label>
-          <input class="form-input" id="sf-grant" type="text" placeholder="Ex: €50.000" autocomplete="off">
+          <label id="sfGrantLabel">Grant Amount</label>
+          <input class="form-input" id="sf-grant" type="text" placeholder="e.g. €50,000" autocomplete="off">
         </div>
         <div class="form-field">
-          <label>Prazo / edital</label>
-          <input class="form-input" id="sf-deadline" type="text" placeholder="Ex: Março 2026" autocomplete="off">
+          <label id="sfDeadlineLabel">Deadline / Call</label>
+          <input class="form-input" id="sf-deadline" type="text" placeholder="e.g. March 2026" autocomplete="off">
         </div>
       </div>
       <div class="form-field">
-        <label>Observações</label>
-        <textarea class="form-textarea" id="sf-notes" placeholder="Informações adicionais sobre o fundo..."></textarea>
+        <label id="sfNotesLabel">Notes</label>
+        <textarea class="form-textarea" id="sf-notes" placeholder="Additional information about the fund..."></textarea>
       </div>
       <div class="suggest-actions">
-        <button class="btn-suggest-cancel" onclick="closeSuggestModal()">Cancelar</button>
-        <button class="btn-suggest-submit" onclick="submitSuggestFund()">Adicionar fundo →</button>
+        <button class="btn-suggest-cancel" id="sfCancelBtn" onclick="closeSuggestModal()">Cancel</button>
+        <button class="btn-suggest-submit" id="sfSubmitBtn" onclick="submitSuggestFund()">Add fund →</button>
       </div>
     </div>
   </div>
@@ -1013,6 +1028,8 @@ const funds = [
     eligibility:['Diretores brasileiros com 1 ou 2 longas anteriores','Projetos de ficção em fase inicial de desenvolvimento','Produtora brasileira anexada ao projeto','Não elegível para documentários'],
     url:'https://iffr.com/en/hubert-bals-fund/funding-schemes/hbfbrazil-co-development-support',
     notes:'Projeto piloto de 3 anos. Primeira edição em 2025.',
+    desc_en:'Groundbreaking partnership launched at Cannes 2025. Supports up to 9 Brazilian feature fiction projects in development (2nd and 3rd films). Each project receives €10,000 and the HBF stamp of international credibility.',
+    eligibility_en:['Brazilian directors with 1 or 2 previous features','Fiction projects in early development stage','Brazilian production company attached to the project','Not eligible for documentaries'],
   },
   {
     id:'hbf-main', name:'Hubert Bals Fund — Produção & Pós',
@@ -1026,6 +1043,8 @@ const funds = [
     eligibility:['Cineastas de países do Sul Global','Longas-metragens de ficção e documentário','Suporte em produção, pós-produção e co-produção','Projeto deve ter co-produtor europeu para o esquema HBF+Europe'],
     url:'https://iffr.com/en/hubert-bals-fund',
     notes:'',
+    desc_en:'Founded in 1988, the HBF supports projects in countries where local financing is scarce. Beyond HBF+Brazil, it runs production, post-production and co-production programs with Europe.',
+    eligibility_en:['Filmmakers from Global South countries','Feature fiction and documentary films','Support for production, post-production and co-production','Project must have a European co-producer for the HBF+Europe scheme'],
   },
   {
     id:'wcf', name:'World Cinema Fund',
@@ -1039,6 +1058,8 @@ const funds = [
     eligibility:['Longas-metragens de ficção e documentários criativos','Realizadores de América Latina, Caribe, África, Oriente Médio e Ásia','Preferência por projetos com parceria europeia/alemã','Projetos já em fase avançada de financiamento'],
     url:'https://www.berlinale.de/en/world-cinema-fund/home/profile.html',
     notes:'Novo diretor desde set/2025: Sata Cissokho.',
+    desc_en:'Founded in 2004 by the Berlinale and the Kulturstiftung des Bundes. Latin America (including Brazil) is a priority region. Supports 10–15 films per year in production, post-production and distribution.',
+    eligibility_en:['Feature fiction films and creative documentaries','Filmmakers from Latin America, Caribbean, Africa, Middle East and Asia','Preference for projects with a European/German partnership','Projects already in advanced financing stage'],
   },
   {
     id:'ibermedia', name:'Programa Ibermedia',
@@ -1052,6 +1073,8 @@ const funds = [
     eligibility:['Produtoras de países membros do CAACI','Co-produção obrigatória entre ao menos 2 países membros','Modalidades: co-produção, co-desenvolvimento, distribuição, formação','Documentários, ficção e séries'],
     url:'https://www.programaibermedia.com',
     notes:'Brasil é um dos maiores beneficiários do programa.',
+    desc_en:'The main Ibero-American multilateral programme, founded in 1997. Brazil is a contributing member. Covers co-production, co-development, distribution and training among 22 member countries.',
+    eligibility_en:['Production companies from CAACI member countries','Mandatory co-production between at least 2 member countries','Modalities: co-production, co-development, distribution, training','Documentaries, fiction and series'],
   },
   {
     id:'idfa-bertha', name:'IDFA Bertha Fund',
@@ -1065,6 +1088,8 @@ const funds = [
     eligibility:['Diretores do Sul Global (inclui Brasil)','Documentários de longa-metragem e médias','Projetos em qualquer fase de produção','Preferência por projetos com potencial de festival'],
     url:'https://www.idfa.nl/en/info/idfa-bertha-fund',
     notes:'',
+    desc_en:'IDFA-linked fund focused exclusively on documentaries by Global South filmmakers. Covers development, production and post-production. Brazilian documentary filmmakers have received multiple grants.',
+    eligibility_en:['Directors from the Global South (includes Brazil)','Feature and medium-length documentaries','Projects at any stage of production','Preference for projects with strong festival potential'],
   },
   {
     id:'sundance', name:'Sundance Institute Documentary Fund',
@@ -1078,6 +1103,8 @@ const funds = [
     eligibility:['Documentários de qualquer país','Preferência por projetos com perspectivas subrepresentadas','Projetos em desenvolvimento ou produção','Documentários de média e longa-metragem'],
     url:'https://sundance.org/programs/documentary-fund',
     notes:'',
+    desc_en:'The Sundance Documentary Fund supports non-fiction documentaries focused on underrepresented stories. Brazil is among the countries with supported projects.',
+    eligibility_en:['Documentaries from any country','Preference for projects with underrepresented perspectives','Projects in development or production','Medium and feature-length documentaries'],
   },
   {
     id:'cplp', name:'CPLP Audiovisual',
@@ -1091,6 +1118,8 @@ const funds = [
     eligibility:['Produtoras de países membros da CPLP','Co-produção entre ao menos 2 países membros','Projetos de ficção e documentário','Primeiros editais previstos para 2025/2026'],
     url:'https://www.cplp.org',
     notes:'Programa recém-lançado — primeiros editais em breve.',
+    desc_en:'New programme formalised by Brazil in 2025 with a €1 million contribution. Promotes co-productions among Portuguese-speaking countries. Enormous potential for Brazil–Portugal–Lusophone Africa co-productions.',
+    eligibility_en:['Production companies from CPLP member countries','Co-production between at least 2 member countries','Fiction and documentary projects','First calls expected in 2025/2026'],
   },
   {
     id:'eurimages', name:'Eurimages',
@@ -1104,6 +1133,8 @@ const funds = [
     eligibility:['Projetos com ao menos 3 co-produtores de países membros','Acesso do Brasil via co-produtores europeus','Longas de ficção, documentário e animação','Co-produção deve seguir as convenções europeias'],
     url:'https://www.coe.int/en/web/eurimages',
     notes:'Acesso indireto — via parceiro co-produtor europeu membro.',
+    desc_en:'Europe's largest co-production fund (44 member countries). Brazil accesses it through European member co-producers. Supports feature fiction, documentary and animation (min. 70 min).',
+    eligibility_en:['Projects with at least 3 co-producers from member countries','Brazil accesses via European co-producers','Feature fiction, documentary and animation','Co-production must follow European conventions'],
   },
   {
     id:'media', name:'Creative Europe – MEDIA',
@@ -1117,6 +1148,8 @@ const funds = [
     eligibility:['Acesso via co-produtora europeia','Múltiplos esquemas: desenvolvimento, distribuição, formação','HBF+Europe conecta diretamente Europa e Brasil','Projetos devem ter empresa europeia como majoritária'],
     url:'https://creative-europe.ec.europa.eu/media',
     notes:'',
+    desc_en:'The EU's main audiovisual programme. Brazil accesses it through co-productions with European companies. The HBF+Europe scheme is co-financed by MEDIA, encouraging Europe–Global South co-productions.',
+    eligibility_en:['Access via European co-production company','Multiple schemes: development, distribution, training','HBF+Europe directly connects Europe and Brazil','Projects must have a European company as majority partner'],
   },
   {
     id:'cnc-france', name:'CNC — Fonds Bilatéraux',
@@ -1130,6 +1163,8 @@ const funds = [
     eligibility:['Co-produção entre empresa francesa e brasileira','Projetos de ficção, documentário e animação','Reconhecimento como co-produção pelos dois países','Benefícios fiscais franceses disponíveis'],
     url:'https://www.cnc.fr',
     notes:'Novo MOU Brasil-CNC assinado em outubro de 2024.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with France (one of the most active). A new MOU of cooperation with the CNC was signed in 2024. The Fonds Sud has historically supported dozens of Brazilian films.',
+    eligibility_en:['Co-production between a French and a Brazilian company','Fiction, documentary and animation projects','Recognition as co-production by both countries','French tax benefits available'],
   },
   {
     id:'telefilm', name:'Telefilm Canada',
@@ -1143,6 +1178,8 @@ const funds = [
     eligibility:['Co-produção entre empresa canadense e brasileira','Projeto aprovado nos dois países','Ficção, documentário e animação','Percentuais mínimos de participação de cada país'],
     url:'https://telefilm.ca',
     notes:'',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Canada. Brazil–Canada co-productions can access incentives from both countries simultaneously.',
+    eligibility_en:['Co-production between a Canadian and a Brazilian company','Project approved in both countries','Fiction, documentary and animation','Minimum participation percentages per country'],
   },
   {
     id:'ffa', name:'FFA – Filmförderungsanstalt',
@@ -1156,6 +1193,8 @@ const funds = [
     eligibility:['Co-produção entre empresa alemã e brasileira','Reconhecimento como Deutsch-Brasilianische Koproduktion','Longas e documentários criativos','Acesso combinado FFA + Länder'],
     url:'https://www.ffa.de',
     notes:'',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Germany, administered by the FFA. Brazil–Germany co-productions can combine FFA incentives with FSA resources.',
+    eligibility_en:['Co-production between a German and a Brazilian company','Recognition as a Deutsch-Brasilianische Koproduktion','Features and creative documentaries','Combined access to FFA + Länder funding'],
   },
   {
     id:'hot-docs', name:'Hot Docs Forum',
@@ -1169,6 +1208,8 @@ const funds = [
     eligibility:['Documentários de qualquer país','Projetos em desenvolvimento avançado ou produção','Processo seletivo competitivo','Networking com financiadores internacionais'],
     url:'https://hotdocs.ca/programmes/forum',
     notes:'',
+    desc_en:'One of the world's leading documentary pitching markets. Selected projects have direct access to international funders, distributors and broadcasters.',
+    eligibility_en:['Documentaries from any country','Projects in advanced development or production','Competitive selection process','Networking with international funders'],
   },
   {
     id:'cine-construccion', name:'Cine en Construcción',
@@ -1182,6 +1223,8 @@ const funds = [
     eligibility:['Longas latino-americanos em fase de pós','Ficção e documentário com mín. 60% filmados','Apresentação de obra em corte aproximado','Co-produção com Europa aumenta chances'],
     url:'https://www.sansebastianfestival.com/cine_en_construccion',
     notes:'',
+    desc_en:'Post-production fund for Latin American films in finishing stage. Offers prizes in post-production services (sound design, colour grading, DCP) and access to European distributors.',
+    eligibility_en:['Latin American features in post-production stage','Fiction and documentary with at least 60% filmed','Presentation of a rough cut','European co-production increases chances'],
   },
   {
     id:'kocca', name:'KOCCA – Korea Creative Content Agency',
@@ -1195,6 +1238,8 @@ const funds = [
     eligibility:['Produtoras brasileiras e sul-coreanas','Projetos de ficção, séries e animação','Escritório KOCCA em SP faz matchmaking','Acordo formal ainda em desenvolvimento'],
     url:'https://www.kocca.kr',
     notes:'Escritório inaugurado em São Paulo em 2024/2025.',
+    desc_en:'KOCCA opened its first Latin American office in São Paulo. Focus on fiction, series and animation co-productions. Bilateral agreement under negotiation with potential for formal calls from 2026.',
+    eligibility_en:['Brazilian and South Korean production companies','Fiction, series and animation projects','KOCCA São Paulo office provides matchmaking','Formal agreement still in development'],
   },
   {
     id:'mercosul', name:'Acordo Audiovisual do Mercosul',
@@ -1208,6 +1253,8 @@ const funds = [
     eligibility:['Produtoras de países membros do Mercosul','Co-produção obrigatória entre ao menos 2 membros','Reconhecimento automático como obra nacional','Acesso aos fundos nacionais (FSA, INCAA, etc.)'],
     url:'https://www.recam.org',
     notes:'Assinado em julho de 2024 — em vigor.',
+    desc_en:'Mercosur Audiovisual Co-production Agreement signed in July 2024. Facilitates mutual recognition of co-productions and cross-access to each member country's incentives.',
+    eligibility_en:['Production companies from Mercosur member countries','Mandatory co-production between at least 2 members','Automatic recognition as national work','Access to national funds (FSA, INCAA, etc.)'],
   },
   {
     id:'nigeria', name:'Brasil–Nigéria: Acordo de Co-produção',
@@ -1221,6 +1268,8 @@ const funds = [
     eligibility:['Produtoras brasileiras e nigerianas','Projetos de ficção e séries','Potencial de acesso à rede Nollywood','Editais formais a serem definidos após internalização'],
     url:'https://braziliancontent.com/en/market/co-production-agreements/',
     notes:'Primeiro acordo cinematográfico Brasil–África negra. Internalização pendente.',
+    desc_en:'Bilateral agreement under development with Nigeria (NFVCB). A historic South-South cooperation milestone, opening access to the Nollywood ecosystem — Africa's largest film industry — for Brazilian producers.',
+    eligibility_en:['Brazilian and Nigerian production companies','Fiction and series projects','Potential access to the Nollywood network','Formal calls to be defined after internalisation'],
   },
 
   // ── NOVOS (adicionados via análise do docx) ──────────────────────────────
@@ -1237,6 +1286,8 @@ const funds = [
     eligibility:['Produtoras brasileiras com projeto de co-produção internacional','Longas de ficção, animação e documentário','Reconhecimento Provisório de Co-produção (RPCI) emitido pela ANCINE','Percentual mínimo de 20–80% conforme o tratado aplicável'],
     url:'https://www.gov.br/ancine/pt-br',
     notes:'Eixo central do fomento: combina recursos do FSA com incentivos do país parceiro.',
+    desc_en:'Brazil's main public mechanism for international co-productions. The 2023/24 call allocated R$ 120 million to feature fiction, documentary and animation in international co-production. In 2022 it was R$ 40 million, with 40% mandatory for North, Northeast and Centre-West regions.',
+    eligibility_en:['Brazilian production companies with an international co-production project','Feature fiction, animation and documentary','Provisional Co-production Recognition (RPCI) issued by ANCINE','Minimum percentage of 20–80% according to the applicable treaty'],
   },
   {
     id:'bfi', name:'BFI – British Film Institute / Global Screen Fund',
@@ -1250,6 +1301,8 @@ const funds = [
     eligibility:['Co-produção entre empresa britânica e brasileira','Participação de 20–80% de cada coprodutor','Elenco e equipe com nacionalidade ou residência nos países parceiros','Reconhecimento pela BFI e pela ANCINE antes das filmagens'],
     url:'https://www.bfi.org.uk',
     notes:'Acordo atualizado em 2022 — abrange cinema e televisão.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with the UK, updated in 2022 (cinema and TV). Official co-productions can access the BFI International Fund, the Global Screen Fund and British regional incentives (Film4, Screen Scotland, Creative Wales, etc.).',
+    eligibility_en:['Co-production between a British and a Brazilian company','20–80% participation from each co-producer','Cast and crew with nationality or residence in partner countries','Recognition by BFI and ANCINE before filming'],
   },
   {
     id:'aide-cnc', name:'Aide aux Cinémas du Monde',
@@ -1263,6 +1316,8 @@ const funds = [
     eligibility:['Projeto deve ter co-produtor francês','Longas-metragens de ficção e documentário','Subsídio concedido antes ou após a conclusão','Obra deve ter potencial de circulação internacional'],
     url:'https://www.cnc.fr/professionnels/aides/aides-aux-cinemas-du-monde',
     notes:'Separado do fundo bilateral CNC — linha específica para obras internacionais.',
+    desc_en:'Selective fund managed by the CNC and Institut Français. Grants subsidies to foreign feature films with a French co-producer, before or after project completion. The Brazil–France agreement allows Brazilian co-productions with a French producer to access this fund directly.',
+    eligibility_en:['Project must have a French co-producer','Feature fiction and documentary','Subsidy granted before or after completion','Work must have potential for international circulation'],
   },
   {
     id:'south-africa-nfvf', name:'Spcine × NFVF Co-Development Fund',
@@ -1276,6 +1331,8 @@ const funds = [
     eligibility:['Produtoras de São Paulo (Brasil) e da África do Sul','Projetos em fase de desenvolvimento','Ficção e documentário','Seleção conjunta Spcine/NFVF'],
     url:'https://www.nfvf.co.za',
     notes:'Acordo bilateral Brasil–África do Sul aprovado pelo Congresso brasileiro em 2023.',
+    desc_en:'Co-development initiative between Spcine and South Africa's NFVF. Selects 4 projects in development, granting approximately US$ 20,000 to each. Connects Brazilian and South African producers. The Brazil–South Africa agreement was approved by Congress in 2023.',
+    eligibility_en:['Production companies from São Paulo (Brazil) and South Africa','Projects in development stage','Fiction and documentary','Joint Spcine/NFVF selection'],
   },
   {
     id:'new-zealand', name:'Brasil–Nova Zelândia: Acordo de Co-produção',
@@ -1289,6 +1346,8 @@ const funds = [
     eligibility:['Co-produção entre empresa neozelandesa e brasileira','Participação de 20–80% de cada coprodutor (mín. 10% em casos excepcionais)','Aprovação das autoridades antes do início das filmagens','Obra reconhecida como nacional nos dois países'],
     url:'https://www.nzfilm.co.nz',
     notes:'Acordo mais recente do Brasil — assinado em março de 2026.',
+    desc_en:'Audiovisual Co-production Agreement signed on 4 March 2026. Recognised works will be treated as national in both countries. Each co-producer must contribute between 20% and 80% of the budget (minimum 10% in exceptional cases). Prior approval of competent authorities is mandatory.',
+    eligibility_en:['Co-production between a New Zealand and a Brazilian company','20–80% participation from each co-producer (min. 10% in exceptional cases)','Approval of authorities before filming begins','Work recognised as national in both countries'],
   },
   {
     id:'acordo-latino', name:'Acordo Latino-Americano de Co-Produção Cinematográfica',
@@ -1302,6 +1361,8 @@ const funds = [
     eligibility:['Produtoras de países signatários do acordo','Participação de 20–80% de cada coprodutor','Reconhecimento como obra nacional em todos os países co-produtores','Acesso combinado aos fundos nacionais (FSA, INCAA, IMCINE etc.)'],
     url:'https://braziliancontent.com/en/market/co-production-agreements/',
     notes:'Instrumento distinto do Ibermedia e do Acordo Mercosul.',
+    desc_en:'Multilateral agreement enabling film and television co-productions among 15 Latin American countries and Spain. Works are treated as national in all signatory countries. Participation between 20–80%. Distinct from Ibermedia (a fund) and Mercosur (a trade bloc).',
+    eligibility_en:['Production companies from signatory countries','20–80% participation from each co-producer','Recognition as a national work in all co-producing countries','Combined access to national funds (FSA, INCAA, IMCINE, etc.)'],
   },
   {
     id:'incaa', name:'INCAA – Instituto Nacional de Cine y Artes Audiovisuales',
@@ -1315,6 +1376,8 @@ const funds = [
     eligibility:['Co-produção entre empresa argentina e brasileira','Participação de 20–80% de cada coprodutor','Reconhecimento pelo INCAA e pela ANCINE','Elenco e equipe de ambos os países'],
     url:'https://www.incaa.gob.ar',
     notes:'Argentina é o maior parceiro histórico do cinema brasileiro em co-produções.',
+    desc_en:'Brazil maintains a Bilateral Co-production Agreement with Argentina (in force). INCAA offers financial support to co-productions under the bilateral agreement and the Latin American Agreement. Recognised works receive national treatment in both countries.',
+    eligibility_en:['Co-production between an Argentine and a Brazilian company','20–80% participation from each co-producer','Recognition by INCAA and ANCINE','Cast and crew from both countries'],
   },
   {
     id:'icaa', name:'ICAA – Instituto de la Cinematografía y de las Artes Audiovisuales',
@@ -1328,6 +1391,8 @@ const funds = [
     eligibility:['Co-produção entre empresa espanhola e brasileira','Participação de 20–80% de cada coprodutor','Elenco e equipe de ambos os países','Acesso combinado ao ICAA e ao FSA'],
     url:'https://www.culturaydeporte.gob.es/cultura/cine/icaa',
     notes:'Espanha é signatária do Acordo Latino-Americano — acesso multilateral disponível.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Spain (in force). ICAA manages Spanish international co-production support programmes. Spain is also a signatory of the Latin American Agreement, broadening multilateral co-production possibilities.',
+    eligibility_en:['Co-production between a Spanish and a Brazilian company','20–80% participation from each co-producer','Cast and crew from both countries','Combined access to ICAA and FSA'],
   },
   {
     id:'sorfond', name:'Sørfond – Norwegian Film Fund',
@@ -1341,6 +1406,8 @@ const funds = [
     eligibility:['Projeto deve ter co-produtor norueguês','Diretor ou projeto de país do Sul Global','Longas de ficção e documentário','Co-produção oficial com percentual definido'],
     url:'https://www.nfi.no/english/funding/sorfond',
     notes:'Mencionado pelo MinC como fundo complementar ao FSA para co-produções.',
+    desc_en:'Norwegian fund for co-productions between Norway and Global South countries. Supports feature fiction and documentaries with a Norwegian co-producer. Brazil is eligible and Brazilian producers have already received support. Combines well with FSA resources.',
+    eligibility_en:['Project must have a Norwegian co-producer','Director or project from a Global South country','Feature fiction and documentary','Official co-production with defined percentages'],
   },
   {
     id:'ica-portugal', name:'ICA – Instituto do Cinema e do Audiovisual',
@@ -1354,6 +1421,8 @@ const funds = [
     eligibility:['Co-produção entre empresa portuguesa e brasileira','Participação de 20–80% de cada coprodutor','Elenco e equipe de ambos os países (ou CPLP)','Reconhecimento pelo ICA e pela ANCINE'],
     url:'https://www.ica-ip.pt',
     notes:'Portugal é signatário do Acordo Latino-Americano e do CPLP Audiovisual.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Portugal (in force since 1981). ICA publishes annual calls for production and co-production support, accessible to Brazilian projects with a Portuguese co-producer. Complements the CPLP Audiovisual Programme.',
+    eligibility_en:['Co-production between a Portuguese and a Brazilian company','20–80% participation from each co-producer','Cast and crew from both countries (or CPLP)','Recognition by ICA and ANCINE'],
   },
   {
     id:'doha', name:'Doha Film Institute',
@@ -1367,6 +1436,8 @@ const funds = [
     eligibility:['Realizadores de países em desenvolvimento (inclui Brasil)','Longas de ficção e documentário','Projetos em desenvolvimento ou produção','Sem exigência de co-produtor catariano'],
     url:'https://www.dohafilminstitute.com',
     notes:'Fundo privado sem fins lucrativos — combina bem com recursos do FSA.',
+    desc_en:'The Doha Film Institute finances feature fiction and documentary projects from developing countries, including Brazil. No co-production with Qatar is required. Mentioned by the Ministry of Culture as an international fund complementary to the FSA.',
+    eligibility_en:['Filmmakers from developing countries (includes Brazil)','Feature fiction and documentary','Projects in development or production','No Qatari co-producer required'],
   },
 ];
 
@@ -1437,9 +1508,134 @@ function removeFilter(type) {
 // ═══════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════
-const phaseLabel = {development:'Desenvolvimento',production:'Produção',post:'Pós-produção',distribution:'Distribuição',training:'Formação'};
+// i18n: language state
+let currentLang = localStorage.getItem('artis_lang') || 'en';
+
+const T = {
+  en: {
+    phase: {development:'Development',production:'Production',post:'Post-production',distribution:'Distribution',training:'Training'},
+    status: {open:'Open',closing:'Closing',closed:'Closed',bilateral:'Bilateral'},
+    format: {fiction:'Fiction',documentary:'Documentary',animation:'Animation',series:'Series'},
+    ui: {
+      headerSub:'AV FUNDS', liveDot:'Live',
+      heroTitle:'AUDIOVISUAL<br>FUNDS<br><span>RADAR</span>',
+      heroDesc:'Updated map of international funds and co-production agreements available for Brazilian projects.',
+      lblOpen:'Open funds', lblTotal:'Total mapped', lblCountries:'Partner countries', lblClosing:'Closing soon',
+      featLabel:'Updated 2026', featTitle:'28 funds · 37 countries · €120M+ available',
+      featDesc:'Bilateral agreements, national funds and international co-production lines for Brazilian projects.',
+      featCta:'See FSA →',
+      ftStatus:'Status', ftRegion:'Region', ftPhase:'Phase', ftFormat:'Format',
+      sidebarCredit:'AV Funds Radar',
+      lblFundsFound:'funds found',
+      sortOptStatus:'Sort: Status', sortOptName:'Name A–Z', sortOptGrant:'Grant Value',
+      emptyMsg:'No funds found',
+      footerNote:'International Audiovisual Funds Radar — Updated 2026',
+      lockTagline:'Audiovisual Funds',
+      lockAccessLabel:'Private Access', lockPassLabel:'Password', lockBtn:'Enter →', lockFoot:'Restricted access',
+      suggestTitle:'Suggest Fund', suggestSubtitle:"Submit an international fund via link — we'll add it to the database.",
+      sfUrlLabel:'Fund Link / URL', sfNameLabel:'Fund Name', sfOrgLabel:'Organization',
+      sfRegionLabel:'Region', sfStatusLabel:'Status', sfPhasesLabel:'Supported Phases', sfFormatsLabel:'Formats',
+      sfGrantLabel:'Grant Amount', sfDeadlineLabel:'Deadline / Call', sfNotesLabel:'Notes',
+      sfPhaseDev:'Development', sfPhaseProd:'Production', sfPhasePost:'Post-production', sfPhaseDist:'Distribution', sfPhaseTrain:'Training',
+      sfFmtFic:'Fiction', sfFmtDoc:'Documentary', sfFmtAni:'Animation', sfFmtSer:'Series',
+      sfRgnGlobal:'Global', sfRgnEurope:'Europe', sfRgnAmericas:'Americas', sfRgnAsia:'Asia', sfRgnAfrica:'Africa', sfRgnLuso:'Lusophone',
+      sfStOpen:'Open', sfStClosing:'Closing soon', sfStBilateral:'Bilateral / Agreement', sfStClosed:'Closed',
+      sfCancelBtn:'Cancel', sfSubmitBtn:'Add fund →',
+      btnSuggestFund:'+ Suggest Fund',
+      cardCta:'View details →', modalAccess:'Access Official Site ↗', modalClose:'Close',
+      modalKeyData:'Key Data', modalPhases:'Supported Phases', modalEligibility:'Eligibility',
+      modalCountries:'Partner Countries', modalNote:'Note',
+      modalGrant:'Grant / Support', modalRegion:'Region', modalDeadline:'Deadline / Calls', modalFormats:'Formats',
+      cardMetaGrant:'Grant / Support', cardMetaDeadline:'Deadline',
+      urlErrMsg:'Please enter a valid link (https://...)',
+      toastAdded:'✓ Fund added to your local database',
+      searchPlaceholder:'Search fund, country, phase...',
+    }
+  },
+  pt: {
+    phase: {development:'Desenvolvimento',production:'Produção',post:'Pós-produção',distribution:'Distribuição',training:'Formação'},
+    status: {open:'Aberto',closing:'Encerrando',closed:'Encerrado',bilateral:'Bilateral'},
+    format: {fiction:'Ficção',documentary:'Documentário',animation:'Animação',series:'Séries'},
+    ui: {
+      headerSub:'FUNDOS AV', liveDot:'Ao vivo',
+      heroTitle:'RADAR<br>DE FUNDOS<br><span>AUDIOVISUAIS</span>',
+      heroDesc:'Mapeamento atualizado de fundos internacionais e acordos de co-produção com parceria para projetos brasileiros.',
+      lblOpen:'Fundos abertos', lblTotal:'Total mapeado', lblCountries:'Países parceiros', lblClosing:'Encerrando em breve',
+      featLabel:'Atualizado 2026', featTitle:'28 fundos · 37 países · €120M+ disponíveis',
+      featDesc:'Acordos bilaterais, fundos nacionais e linhas internacionais para co-produção brasileira.',
+      featCta:'Ver FSA →',
+      ftStatus:'Status', ftRegion:'Região', ftPhase:'Fase', ftFormat:'Formato',
+      sidebarCredit:'Radar de Fundos AV',
+      lblFundsFound:'fundos encontrados',
+      sortOptStatus:'Ordenar: Status', sortOptName:'Nome A–Z', sortOptGrant:'Valor do Grant',
+      emptyMsg:'Nenhum fundo encontrado',
+      footerNote:'Radar de Fundos Audiovisuais Internacionais — Atualizado 2026',
+      lockTagline:'Fundos Audiovisuais',
+      lockAccessLabel:'Acesso Privado', lockPassLabel:'Senha', lockBtn:'Entrar →', lockFoot:'Acesso restrito',
+      suggestTitle:'Sugerir Fundo', suggestSubtitle:'Indique um fundo internacional via link — adicionamos à base.',
+      sfUrlLabel:'Link / URL do fundo', sfNameLabel:'Nome do fundo', sfOrgLabel:'Organização',
+      sfRegionLabel:'Região', sfStatusLabel:'Status', sfPhasesLabel:'Fases apoiadas', sfFormatsLabel:'Formatos',
+      sfGrantLabel:'Valor do grant', sfDeadlineLabel:'Prazo / edital', sfNotesLabel:'Observações',
+      sfPhaseDev:'Desenvolvimento', sfPhaseProd:'Produção', sfPhasePost:'Pós-produção', sfPhaseDist:'Distribuição', sfPhaseTrain:'Formação',
+      sfFmtFic:'Ficção', sfFmtDoc:'Documentário', sfFmtAni:'Animação', sfFmtSer:'Séries',
+      sfRgnGlobal:'Global', sfRgnEurope:'Europa', sfRgnAmericas:'Américas', sfRgnAsia:'Ásia', sfRgnAfrica:'África', sfRgnLuso:'Lusofonia',
+      sfStOpen:'Aberto', sfStClosing:'Encerrando em breve', sfStBilateral:'Bilateral / Acordo', sfStClosed:'Encerrado',
+      sfCancelBtn:'Cancelar', sfSubmitBtn:'Adicionar fundo →',
+      btnSuggestFund:'+ Sugerir Fundo',
+      cardCta:'Ver detalhes →', modalAccess:'Acessar Site Oficial ↗', modalClose:'Fechar',
+      modalKeyData:'Dados Principais', modalPhases:'Fases Apoiadas', modalEligibility:'Elegibilidade',
+      modalCountries:'Países Parceiros', modalNote:'Nota',
+      modalGrant:'Grant / Apoio', modalRegion:'Região', modalDeadline:'Prazo / Chamadas', modalFormats:'Formatos',
+      cardMetaGrant:'Grant / Apoio', cardMetaDeadline:'Prazo',
+      urlErrMsg:'Insira um link válido (https://...)',
+      toastAdded:'✓ Fundo adicionado à sua base local',
+      searchPlaceholder:'Buscar fundo, país, fase...',
+    }
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('artis_lang', lang);
+  document.getElementById('btnEN').classList.toggle('active', lang==='en');
+  document.getElementById('btnPT').classList.toggle('active', lang==='pt');
+  const u = T[lang].ui;
+  // Update all identified elements
+  const ids = ['headerSub','liveDot','lblOpen','lblTotal','lblCountries','lblClosing',
+    'featLabel','featTitle','featDesc','featCta','ftStatus','ftRegion','ftPhase','ftFormat',
+    'sidebarCredit','lblFundsFound','sortOptStatus','sortOptName','sortOptGrant','emptyMsg','footerNote',
+    'lockTagline','lockAccessLabel','lockPassLabel','lockBtn','lockFoot',
+    'suggestTitle','suggestSubtitle','sfUrlLabel','sfNameLabel','sfOrgLabel',
+    'sfRegionLabel','sfStatusLabel','sfPhasesLabel','sfFormatsLabel',
+    'sfGrantLabel','sfDeadlineLabel','sfNotesLabel',
+    'sfPhaseDev','sfPhaseProd','sfPhasePost','sfPhaseDist','sfPhaseTrain',
+    'sfFmtFic','sfFmtDoc','sfFmtAni','sfFmtSer',
+    'sfRgnGlobal','sfRgnEurope','sfRgnAmericas','sfRgnAsia','sfRgnAfrica','sfRgnLuso',
+    'sfStOpen','sfStClosing','sfStBilateral','sfStClosed',
+    'sfCancelBtn','sfSubmitBtn','btnSuggestFund'
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && u[id] !== undefined) el.innerHTML = u[id];
+  });
+  // heroTitle is innerHTML
+  const ht = document.getElementById('heroTitle');
+  if (ht) ht.innerHTML = u.heroTitle;
+  const hd = document.getElementById('heroDesc');
+  if (hd) hd.textContent = u.heroDesc;
+  // search placeholder
+  const ms = document.getElementById('mainSearch');
+  if (ms) ms.placeholder = u.searchPlaceholder;
+  // url error
+  const ue = document.getElementById('sf-url-err');
+  if (ue) ue.textContent = u.urlErrMsg;
+  // re-render cards with new language
+  renderCards();
+}
+
+const phaseLabel = T.en.phase;
 const phaseClass = {development:'phase-dev',production:'phase-prod',post:'phase-post',distribution:'phase-dist',training:'phase-form'};
-const statusLabel = {open:'Aberto',closing:'Encerrando',closed:'Encerrado',bilateral:'Bilateral'};
+// statusLabel is now dynamic — see T[currentLang].status
 
 function renderCards() {
   const list  = getFiltered();
@@ -1451,6 +1647,10 @@ function renderCards() {
   empty.style.display = 'none';
   grid.style.gridTemplateColumns = currentView==='list' ? '1fr' : '';
 
+  const phL = T[currentLang].phase;
+  const stL = T[currentLang].status;
+  const fmL = T[currentLang].format;
+  const uL  = T[currentLang].ui;
   grid.innerHTML = list.map(f=>`
     <div class="fund-card status-${f.status}" onclick="openModal('${f.id}')">
       <div class="card-accent-bar"></div>
@@ -1462,23 +1662,23 @@ function renderCards() {
         <div class="card-name">${f.name}</div>
         <div class="card-org">${f.org}</div>
       </div>
-      <p class="card-desc">${f.desc}</p>
+      <p class="card-desc">${currentLang==='en'&&f.desc_en?f.desc_en:f.desc}</p>
       <div class="card-tags">
-        ${f.phases.map(p=>`<span class="phase-tag ${phaseClass[p]}">${phaseLabel[p]}</span>`).join('')}
+        ${f.phases.map(p=>`<span class="phase-tag ${phaseClass[p]}">${phL[p]}</span>`).join('')}
       </div>
       <div class="card-meta">
         <div>
-          <div class="meta-label">Grant / Apoio</div>
+          <div class="meta-label">${uL.cardMetaGrant}</div>
           <div class="meta-value ${f.grantNum>0?'amber':''}">${f.grant}</div>
         </div>
         <div>
-          <div class="meta-label">Prazo</div>
+          <div class="meta-label">${uL.cardMetaDeadline}</div>
           <div class="meta-value ${f.deadlineUrgency==='warm'?'yellow':''}">${f.deadline}</div>
         </div>
       </div>
       <div class="card-footer">
         <span class="card-region">${f.regions_display}</span>
-        <span class="card-cta">Ver detalhes →</span>
+        <span class="card-cta">${uL.cardCta}</span>
       </div>
     </div>`).join('');
 
@@ -1503,65 +1703,71 @@ function updateCounts() {
 function openModal(id) {
   const f = funds.find(x=>x.id===id);
   if(!f) return;
+  const phL = T[currentLang].phase;
+  const stL = T[currentLang].status;
+  const fmL = T[currentLang].format;
+  const uL  = T[currentLang].ui;
+  const modalDesc = currentLang==='en'&&f.desc_en ? f.desc_en : f.desc;
+  const modalElig = currentLang==='en'&&f.eligibility_en ? f.eligibility_en : f.eligibility;
   document.getElementById('modalContent').innerHTML = `
     <div class="modal-header">
       <button class="modal-close" onclick="closeModal()">×</button>
       <div class="modal-icon">${f.icon}</div>
       <div class="modal-title">${f.name}</div>
       <div class="modal-subtitle">${f.org}</div>
-      <span class="modal-status status-badge status-${f.status}">${statusLabel[f.status]}</span>
+      <span class="modal-status status-badge status-${f.status}">${stL[f.status]}</span>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">${f.desc}</p>
+      <p class="modal-desc">${modalDesc}</p>
 
       <div>
-        <div class="modal-section-title">Dados Principais</div>
+        <div class="modal-section-title">${uL.modalKeyData}</div>
         <div class="info-grid">
           <div class="info-box">
-            <div class="info-box-label">Grant / Apoio</div>
+            <div class="info-box-label">${uL.modalGrant}</div>
             <div class="info-box-value ${f.grantNum>0?'amber':''}">${f.grant}</div>
           </div>
           <div class="info-box">
-            <div class="info-box-label">Região</div>
+            <div class="info-box-label">${uL.modalRegion}</div>
             <div class="info-box-value">${f.regions_display}</div>
           </div>
           <div class="info-box">
-            <div class="info-box-label">Prazo / Chamadas</div>
+            <div class="info-box-label">${uL.modalDeadline}</div>
             <div class="info-box-value">${f.deadline}</div>
           </div>
           <div class="info-box">
-            <div class="info-box-label">Formatos</div>
-            <div class="info-box-value">${f.formats.map(x=>({fiction:'Ficção',documentary:'Documentário',animation:'Animação',series:'Séries'}[x]||x)).join(', ')}</div>
+            <div class="info-box-label">${uL.modalFormats}</div>
+            <div class="info-box-value">${f.formats.map(x=>(fmL[x]||x)).join(', ')}</div>
           </div>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-title">Fases Apoiadas</div>
+        <div class="modal-section-title">${uL.modalPhases}</div>
         <div class="phases-row">
-          ${f.phases.map(p=>`<span class="phase-tag ${phaseClass[p]}">${phaseLabel[p]}</span>`).join('')}
+          ${f.phases.map(p=>`<span class="phase-tag ${phaseClass[p]}">${phL[p]}</span>`).join('')}
         </div>
       </div>
 
       <div>
-        <div class="modal-section-title">Elegibilidade</div>
+        <div class="modal-section-title">${uL.modalEligibility}</div>
         <ul class="eligibility-list">
-          ${f.eligibility.map(e=>`<li>${e}</li>`).join('')}
+          ${modalElig.map(e=>`<li>${e}</li>`).join('')}
         </ul>
       </div>
 
       <div>
-        <div class="modal-section-title">Países Parceiros</div>
+        <div class="modal-section-title">${uL.modalCountries}</div>
         <div class="countries-list">
           ${f.countries.map(c=>`<span class="country-tag">${c}</span>`).join('')}
         </div>
       </div>
 
-      ${f.notes?`<div class="note-box"><p><strong>Nota</strong>${f.notes}</p></div>`:''}
+      ${f.notes?`<div class="note-box"><p><strong>${uL.modalNote}</strong>${f.notes}</p></div>`:''}
 
       <div class="modal-actions">
-        <button class="btn-modal-primary" onclick="window.open('${f.url}','_blank')">Acessar Site Oficial ↗</button>
-        <button class="btn-modal-secondary" onclick="closeModal()">Fechar</button>
+        <button class="btn-modal-primary" onclick="window.open('${f.url}','_blank')">${uL.modalAccess}</button>
+        <button class="btn-modal-secondary" onclick="closeModal()">${uL.modalClose}</button>
       </div>
     </div>`;
   document.getElementById('modalOverlay').classList.add('visible');
@@ -1626,8 +1832,8 @@ function submitSuggestFund() {
 
   const newFund = {
     id: 'user-' + Date.now(),
-    name: rawName || 'Fundo sugerido',
-    org: document.getElementById('sf-org').value.trim() || 'Não informado',
+    name: rawName || (currentLang==='en'?'Suggested fund':'Fundo sugerido'),
+    org: document.getElementById('sf-org').value.trim() || (currentLang==='en'?'Not provided':'Não informado'),
     icon: '🔖',
     status: document.getElementById('sf-status').value,
     region: document.getElementById('sf-region').value,
@@ -1636,11 +1842,11 @@ function submitSuggestFund() {
     formats: formats.length ? formats : ['fiction'],
     grant: rawGrant || '—',
     grantNum: parseFloat(rawGrant.replace(/[^0-9]/g,'')) || 0,
-    deadline: document.getElementById('sf-deadline').value.trim() || 'Consultar edital',
+    deadline: document.getElementById('sf-deadline').value.trim() || (currentLang==='en'?'Check official call':'Consultar edital'),
     deadlineUrgency: 'cool',
     countries: ['Brasil'],
-    desc: 'Fundo sugerido pela comunidade ARTIS. Acesse o link para informações completas.',
-    eligibility: ['Consultar edital oficial no link indicado'],
+    desc: currentLang==='en'?'Fund suggested by the ARTIS community. Visit the link for full information.':'Fundo sugerido pela comunidade ARTIS. Acesse o link para informações completas.',
+    eligibility: [currentLang==='en'?'Check the official call at the provided link':'Consultar edital oficial no link indicado'],
     url: urlVal,
     notes: document.getElementById('sf-notes').value.trim(),
     userAdded: true,
@@ -1660,7 +1866,7 @@ function submitSuggestFund() {
   document.getElementById('suggestOverlay').classList.remove('visible');
   document.body.style.overflow = '';
   renderCards();
-  showToast('✓ Fundo adicionado à sua base local');
+  showToast(T[currentLang].ui.toastAdded);
 }
 
 function showToast(msg) {
@@ -1699,7 +1905,7 @@ try {
   }
 } catch(e) {}
 
-renderCards();
+setLang(currentLang);
 </script>
 </body>
 </html>
