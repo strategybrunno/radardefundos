@@ -652,8 +652,8 @@
 
     <div class="lock-brand-mid">
       <div class="lock-brand-headline">
-        <strong>33 funds</strong> mapped<br>
-        <strong>42 countries</strong> partners<br>
+        <strong>36 funds</strong> mapped<br>
+        <strong>45 countries</strong> partners<br>
         <strong>€ 120M+</strong> available<br>
       </div>
       <div class="lock-brand-rule"></div>
@@ -729,7 +729,7 @@
         <span class="stat-lbl" id="lblTotal">Total mapped</span>
       </div>
       <div class="stat-box">
-        <span class="stat-num" id="statCountries">42</span>
+        <span class="stat-num" id="statCountries">45</span>
         <span class="stat-lbl" id="lblCountries">Partner countries</span>
       </div>
       <div class="stat-box">
@@ -745,7 +745,7 @@
   <div class="featured-banner">
     <span class="featured-label" id="featLabel">Updated 2026</span>
     <div class="featured-text">
-      <h3 id="featTitle">33 funds · 42 countries · €120M+ available</h3>
+      <h3 id="featTitle">36 funds · 45 countries · €120M+ available</h3>
       <p id="featDesc">Bilateral agreements, national funds and international co-production lines for Brazilian projects.</p>
     </div>
     <button class="featured-cta" id="featCta" onclick="openFundById('fsa-internacional')">See FSA →</button>
@@ -1517,6 +1517,54 @@ const funds = [
     eligibility_en:['Co-production between a Venezuelan and a Brazilian company','Participation of 20–80% from each co-producer','Recognition by CNAC and ANCINE','Check with ANCINE on the current operational status of this agreement'],
   },
 
+  // ── PROTOCOLOS DE COOPERAÇÃO ANCINE (México, Uruguai, Ucrânia) ──────────
+
+  {
+    id:'mexico-imcine', name:'IMCINE — Protocolo de Cooperação Brasil-México',
+    org:'Instituto Mexicano de Cinematografía (IMCINE) / ANCINE',
+    icon:'🇲🇽', status:'bilateral', region:'americas', regions_display:'México / Brasil',
+    phases:['development','production','distribution'], formats:['fiction','documentary','animation','series'],
+    grant:'FSA + FOPROCINE/FIDECINE (México)', grantNum:0,
+    deadline:'Via protocolo bilateral + editais IMCINE', deadlineUrgency:'cool',
+    countries:['Brasil','México'],
+    desc:'O Brasil possui Protocolo de Cooperação com o IMCINE (Instituto Mexicano de Cinematografía), firmado na lista oficial da ANCINE. México e Brasil são as duas maiores indústrias cinematográficas da América Latina. Co-produções também acessam o Ibermedia e o Acordo Latino-Americano, além dos fundos nacionais FOPROCINE e FIDECINE.',
+    eligibility:['Co-produção ou cooperação entre empresas mexicanas e brasileiras','Acesso cruzado ao FSA e aos fundos mexicanos (FOPROCINE/FIDECINE)','Projetos também elegíveis via Ibermedia e Acordo Latino-Americano','Reconhecimento pela ANCINE e pelo IMCINE'],
+    url:'https://www.imcine.gob.mx',
+    notes:'México é signatário do Acordo Latino-Americano e do Ibermedia — múltiplos instrumentos disponíveis para co-produções Brasil-México.',
+    desc_en:'Brazil has a Cooperation Protocol with IMCINE (Instituto Mexicano de Cinematografía), listed on the official ANCINE page. Mexico and Brazil are the two largest film industries in Latin America. Co-productions can also access Ibermedia and the Latin American Agreement, as well as the Mexican national funds FOPROCINE and FIDECINE.',
+    eligibility_en:['Co-production or cooperation between Mexican and Brazilian companies','Cross-access to the FSA and Mexican funds (FOPROCINE/FIDECINE)','Projects also eligible via Ibermedia and the Latin American Agreement','Recognition by ANCINE and IMCINE'],
+  },
+  {
+    id:'uruguai-acau', name:'ACAU — Protocolo de Cooperação Brasil-Uruguai',
+    org:'Agencia del Cine y Audiovisual del Uruguay (ACAU) / ANCINE',
+    icon:'🇺🇾', status:'bilateral', region:'americas', regions_display:'Uruguai / Brasil',
+    phases:['development','production'], formats:['fiction','documentary','animation'],
+    grant:'FSA + ACAU (Uruguai)', grantNum:0,
+    deadline:'Via protocolo bilateral + Mercosul', deadlineUrgency:'cool',
+    countries:['Brasil','Uruguai'],
+    desc:'O Brasil possui Protocolo de Cooperação com a ACAU (Agencia del Cine y Audiovisual del Uruguay). Instrumento bilateral direto que complementa o Acordo Audiovisual do Mercosul (também vigente). Co-produções Brasil-Uruguai podem acumular o protocolo bilateral com os mecanismos multilaterais do Mercosul e do Ibermedia.',
+    eligibility:['Co-produção entre empresa uruguaia e brasileira','Acesso combinado ao FSA e aos fundos da ACAU','Complementa o Acordo Audiovisual do Mercosul','Também elegível via Ibermedia e Acordo Latino-Americano'],
+    url:'https://acau.gub.uy',
+    notes:'O Uruguai é membro do Mercosul Audiovisual — protocolo bilateral e multilateral disponíveis simultaneamente.',
+    desc_en:'Brazil has a Cooperation Protocol with ACAU (Agencia del Cine y Audiovisual del Uruguay). A direct bilateral instrument that complements the Mercosur Audiovisual Agreement (also in force). Brazil–Uruguay co-productions can combine the bilateral protocol with Mercosur and Ibermedia multilateral mechanisms.',
+    eligibility_en:['Co-production between a Uruguayan and a Brazilian company','Combined access to the FSA and ACAU funds','Complements the Mercosur Audiovisual Agreement','Also eligible via Ibermedia and the Latin American Agreement'],
+  },
+  {
+    id:'ucrania', name:'Agência Estatal para o Cinema — Protocolo de Cooperação Brasil-Ucrânia',
+    org:'Agência Estatal para o Cinema da Ucrânia / ANCINE',
+    icon:'🇺🇦', status:'bilateral', region:'europe', regions_display:'Ucrânia / Brasil',
+    phases:['development','production'], formats:['fiction','documentary'],
+    grant:'Via protocolo bilateral + Eurimages (via parceiro europeu)', grantNum:0,
+    deadline:'Consultar ANCINE', deadlineUrgency:'cool',
+    countries:['Brasil','Ucrânia'],
+    desc:'O Brasil possui Protocolo de Cooperação com a Agência Estatal para o Cinema da Ucrânia, constante da lista oficial da ANCINE. A Ucrânia é membro do Eurimages (Conselho da Europa) e tem produção cinematográfica reconhecida internacionalmente. Abre caminhos para co-produções trilaterais Brasil-Ucrânia-Europa.',
+    eligibility:['Co-produção entre empresa ucraniana e brasileira','Protocolo de cooperação técnica e artística','Potencial acesso ao Eurimages via co-produtor ucraniano membro','Consultar ANCINE sobre status operacional atual'],
+    url:'https://ucf.in.ua',
+    notes:'Ucrânia é membro do Eurimages — co-produções Brasil-Ucrânia podem acessar recursos europeus adicionais via parceiro ucraniano.',
+    desc_en:'Brazil has a Cooperation Protocol with the State Film Agency of Ukraine, listed on the official ANCINE page. Ukraine is a Eurimages member (Council of Europe) and has internationally acclaimed cinema. This opens pathways for trilateral Brazil–Ukraine–Europe co-productions.',
+    eligibility_en:['Co-production between a Ukrainian and a Brazilian company','Technical and artistic cooperation protocol','Potential Eurimages access via Ukrainian co-producer member','Check with ANCINE on current operational status'],
+  },
+
 ];
 
 // ═══════════════════════════════════════
@@ -1639,7 +1687,7 @@ const T = {
       heroTitle:'RADAR<br>DE FUNDOS<br><span>AUDIOVISUAIS</span>',
       heroDesc:'Mapeamento atualizado de fundos internacionais e acordos de co-produção com parceria para projetos brasileiros.',
       lblOpen:'Fundos abertos', lblTotal:'Total mapeado', lblCountries:'Países parceiros', lblClosing:'Encerrando em breve',
-      featLabel:'Atualizado 2026', featTitle:'33 fundos · 42 países · €120M+ disponíveis',
+      featLabel:'Atualizado 2026', featTitle:'36 fundos · 45 países · €120M+ disponíveis',
       featDesc:'Acordos bilaterais, fundos nacionais e linhas internacionais para co-produção brasileira.',
       featCta:'Ver FSA →',
       ftStatus:'Status', ftRegion:'Região', ftPhase:'Fase', ftFormat:'Formato',
