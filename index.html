@@ -652,8 +652,8 @@
 
     <div class="lock-brand-mid">
       <div class="lock-brand-headline">
-        <strong>28 funds</strong> mapped<br>
-        <strong>37 countries</strong> partners<br>
+        <strong>33 funds</strong> mapped<br>
+        <strong>42 countries</strong> partners<br>
         <strong>€ 120M+</strong> available<br>
       </div>
       <div class="lock-brand-rule"></div>
@@ -729,7 +729,7 @@
         <span class="stat-lbl" id="lblTotal">Total mapped</span>
       </div>
       <div class="stat-box">
-        <span class="stat-num" id="statCountries">37</span>
+        <span class="stat-num" id="statCountries">42</span>
         <span class="stat-lbl" id="lblCountries">Partner countries</span>
       </div>
       <div class="stat-box">
@@ -745,7 +745,7 @@
   <div class="featured-banner">
     <span class="featured-label" id="featLabel">Updated 2026</span>
     <div class="featured-text">
-      <h3 id="featTitle">28 funds · 37 countries · €120M+ available</h3>
+      <h3 id="featTitle">33 funds · 42 countries · €120M+ available</h3>
       <p id="featDesc">Bilateral agreements, national funds and international co-production lines for Brazilian projects.</p>
     </div>
     <button class="featured-cta" id="featCta" onclick="openFundById('fsa-internacional')">See FSA →</button>
@@ -1439,6 +1439,84 @@ const funds = [
     desc_en:'The Doha Film Institute finances feature fiction and documentary projects from developing countries, including Brazil. No co-production with Qatar is required. Mentioned by the Ministry of Culture as an international fund complementary to the FSA.',
     eligibility_en:['Filmmakers from developing countries (includes Brazil)','Feature fiction and documentary','Projects in development or production','No Qatari co-producer required'],
   },
+  // ── NOVOS — Acordos Bilaterais ANCINE (Chile, Índia, Israel, Itália, Venezuela) ──
+
+  {
+    id:'chile', name:'Ministerio de las Culturas — Acordo Bilateral Brasil-Chile',
+    org:'Ministerio de las Culturas, las Artes y el Patrimonio / ANCINE',
+    icon:'🇨🇱', status:'bilateral', region:'americas', regions_display:'Chile / Brasil',
+    phases:['development','production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'FSA + fundos nacionais chilenos', grantNum:0,
+    deadline:'Via acordo bilateral', deadlineUrgency:'cool',
+    countries:['Brasil','Chile'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com o Chile (vigente). Co-produções Brasil-Chile são reconhecidas como obras nacionais nos dois países e podem acumular incentivos do FSA e dos fundos do Ministerio de las Culturas. Chile é também signatário do Acordo Latino-Americano.',
+    eligibility:['Co-produção entre empresa chilena e brasileira','Participação de 20–80% de cada coprodutor','Reconhecimento pelo Ministerio de las Culturas e pela ANCINE','Elenco e equipe de ambos os países'],
+    url:'https://www.cultura.gob.cl',
+    notes:'Chile é signatário do Acordo Latino-Americano de Co-produção — acesso multilateral disponível.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Chile (in force). Brazil–Chile co-productions are recognised as national works in both countries and can combine FSA incentives with Chilean Ministerio de las Culturas funds. Chile is also a signatory of the Latin American Agreement.',
+    eligibility_en:['Co-production between a Chilean and a Brazilian company','Participation of 20–80% from each co-producer','Recognition by the Ministerio de las Culturas and ANCINE','Cast and crew from both countries'],
+  },
+  {
+    id:'india', name:'NFDC — National Film Development Corporation',
+    org:'Governo da Índia / ANCINE',
+    icon:'🇮🇳', status:'bilateral', region:'asia', regions_display:'Índia / Brasil',
+    phases:['development','production'], formats:['fiction','documentary'],
+    grant:'Via acordo bilateral + editais NFDC', grantNum:0,
+    deadline:'Via acordo bilateral', deadlineUrgency:'cool',
+    countries:['Brasil','Índia'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com a Índia (vigente). A NFDC é a entidade responsável pelo lado indiano. Co-produções Brasil-Índia podem se beneficiar também da cooperação trilateral IBSA (Índia-Brasil-África do Sul), que conecta três das maiores indústrias audiovisuais do Sul Global.',
+    eligibility:['Co-produção entre empresa indiana e brasileira','Participação de 20–80% de cada coprodutor','Reconhecimento pela NFDC e pela ANCINE','Potencial de acesso à cooperação trilateral IBSA'],
+    url:'https://www.nfdcindia.com',
+    notes:'Iniciativa IBSA (Índia-Brasil-África do Sul) complementa o acordo bilateral com co-produção trilateral.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with India (in force). The NFDC is the responsible body on the Indian side. Brazil–India co-productions can also benefit from the trilateral IBSA (India–Brazil–South Africa) cooperation framework, connecting three of the Global South\'s largest audiovisual industries.',
+    eligibility_en:['Co-production between an Indian and a Brazilian company','Participation of 20–80% from each co-producer','Recognition by NFDC and ANCINE','Potential access to the trilateral IBSA cooperation'],
+  },
+  {
+    id:'israel', name:'Israel Film Fund — Acordo Bilateral Brasil-Israel',
+    org:'Israel Film Fund / Governo de Israel / ANCINE',
+    icon:'🇮🇱', status:'bilateral', region:'global', regions_display:'Israel / Brasil',
+    phases:['development','production'], formats:['fiction','documentary'],
+    grant:'Via acordo bilateral + Israel Film Fund', grantNum:0,
+    deadline:'Via acordo bilateral', deadlineUrgency:'cool',
+    countries:['Brasil','Israel'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com Israel (vigente). O Israel Film Fund é o principal mecanismo de financiamento cinematográfico israelense. Co-produções Brasil-Israel são reconhecidas como obras nacionais nos dois países e podem acumular incentivos de ambos.',
+    eligibility:['Co-produção entre empresa israelense e brasileira','Participação de 20–80% de cada coprodutor','Reconhecimento pelo Israel Film Fund e pela ANCINE','Elenco e equipe de ambos os países'],
+    url:'https://www.filmfund.org.il',
+    notes:'Israel é membro associado do Eurimages — co-produções trilaterais com países europeus são possíveis.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Israel (in force). The Israel Film Fund is the main Israeli film financing mechanism. Brazil–Israel co-productions are recognised as national works in both countries and can combine incentives from both sides.',
+    eligibility_en:['Co-production between an Israeli and a Brazilian company','Participation of 20–80% from each co-producer','Recognition by the Israel Film Fund and ANCINE','Cast and crew from both countries'],
+  },
+  {
+    id:'italia', name:'DGA Cinema e Audiovisivo — Acordo Bilateral Brasil-Itália',
+    org:'Direzione Generale Cinema e Audiovisivo / Ministero della Cultura (MiC) / ANCINE',
+    icon:'🇮🇹', status:'bilateral', region:'europe', regions_display:'Itália / Brasil',
+    phases:['development','production','distribution'], formats:['fiction','documentary','animation'],
+    grant:'Variável (MiC + FSA)', grantNum:200000,
+    deadline:'Via acordo bilateral + editais anuais MiC', deadlineUrgency:'cool',
+    countries:['Brasil','Itália'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com a Itália (vigente). O MiC/DGA publica editais anuais de apoio à co-produção internacional. A Itália é também membro do Eurimages (44 países), abrindo possibilidades de co-financiamento europeu adicional para projetos Brasil-Itália.',
+    eligibility:['Co-produção entre empresa italiana e brasileira','Participação de 20–80% de cada coprodutor','Reconhecimento pelo DGA Cinema e pela ANCINE','Acesso potencial ao Eurimages via co-produtor italiano'],
+    url:'https://cinema.gov.it',
+    notes:'Itália é membro do Eurimages — co-produções Brasil-Itália podem acumular recursos europeus adicionais.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Italy (in force). The MiC/DGA publishes annual international co-production support calls. Italy is also a Eurimages member (44 countries), opening additional European co-financing possibilities for Brazil–Italy projects.',
+    eligibility_en:['Co-production between an Italian and a Brazilian company','Participation of 20–80% from each co-producer','Recognition by the DGA Cinema and ANCINE','Potential access to Eurimages via Italian co-producer'],
+  },
+  {
+    id:'venezuela', name:'CNAC — Acordo Bilateral Brasil-Venezuela',
+    org:'Centro Nacional Autónomo de Cinematografía (CNAC) / ANCINE',
+    icon:'🇻🇪', status:'bilateral', region:'americas', regions_display:'Venezuela / Brasil',
+    phases:['production'], formats:['fiction','documentary'],
+    grant:'Consultar ANCINE', grantNum:0,
+    deadline:'Consultar ANCINE', deadlineUrgency:'cool',
+    countries:['Brasil','Venezuela'],
+    desc:'O Brasil possui Acordo Bilateral de Co-produção com a Venezuela (constante da lista oficial da ANCINE). O CNAC é o organismo responsável pelo audiovisual venezuelano. Venezuela é também signatária do Acordo Latino-Americano de Co-produção. Recomenda-se consultar a ANCINE sobre o status operacional atual.',
+    eligibility:['Co-produção entre empresa venezuelana e brasileira','Participação de 20–80% de cada coprodutor','Reconhecimento pelo CNAC e pela ANCINE','Consultar ANCINE sobre status operacional atual'],
+    url:'https://www.gov.br/ancine/pt-br/acesso-a-informacao/legislacao/atos-acordos/acordos-internacionais/acordos-bilaterais',
+    notes:'Venezuela é signatária do Acordo Latino-Americano. Consultar ANCINE sobre o status operacional do acordo.',
+    desc_en:'Brazil has a Bilateral Co-production Agreement with Venezuela (listed on the official ANCINE page). CNAC is the Venezuelan audiovisual authority. Venezuela is also a signatory of the Latin American Co-production Agreement. It is advisable to check with ANCINE on the current operational status.',
+    eligibility_en:['Co-production between a Venezuelan and a Brazilian company','Participation of 20–80% from each co-producer','Recognition by CNAC and ANCINE','Check with ANCINE on the current operational status of this agreement'],
+  },
+
 ];
 
 // ═══════════════════════════════════════
@@ -1521,7 +1599,7 @@ const T = {
       heroTitle:'AUDIOVISUAL<br>FUNDS<br><span>RADAR</span>',
       heroDesc:'Updated map of international funds and co-production agreements available for Brazilian projects.',
       lblOpen:'Open funds', lblTotal:'Total mapped', lblCountries:'Partner countries', lblClosing:'Closing soon',
-      featLabel:'Updated 2026', featTitle:'28 funds · 37 countries · €120M+ available',
+      featLabel:'Updated 2026', featTitle:'33 funds · 42 countries · €120M+ available',
       featDesc:'Bilateral agreements, national funds and international co-production lines for Brazilian projects.',
       featCta:'See FSA →',
       ftStatus:'Status', ftRegion:'Region', ftPhase:'Phase', ftFormat:'Format',
@@ -1561,7 +1639,7 @@ const T = {
       heroTitle:'RADAR<br>DE FUNDOS<br><span>AUDIOVISUAIS</span>',
       heroDesc:'Mapeamento atualizado de fundos internacionais e acordos de co-produção com parceria para projetos brasileiros.',
       lblOpen:'Fundos abertos', lblTotal:'Total mapeado', lblCountries:'Países parceiros', lblClosing:'Encerrando em breve',
-      featLabel:'Atualizado 2026', featTitle:'28 fundos · 37 países · €120M+ disponíveis',
+      featLabel:'Atualizado 2026', featTitle:'33 fundos · 42 países · €120M+ disponíveis',
       featDesc:'Acordos bilaterais, fundos nacionais e linhas internacionais para co-produção brasileira.',
       featCta:'Ver FSA →',
       ftStatus:'Status', ftRegion:'Região', ftPhase:'Fase', ftFormat:'Formato',
