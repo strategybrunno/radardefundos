@@ -1006,7 +1006,7 @@ function unlock() {
     err.textContent = '';
   } else {
     inp.classList.add('shake');
-    err.textContent = 'Senha incorreta.';
+    err.textContent = currentLang==='en' ? 'Incorrect password.' : 'Senha incorreta.';
     inp.value = '';
     setTimeout(() => { inp.classList.remove('shake'); inp.focus(); }, 400);
   }
@@ -1635,7 +1635,7 @@ function setLang(lang) {
 
 const phaseLabel = T.en.phase;
 const phaseClass = {development:'phase-dev',production:'phase-prod',post:'phase-post',distribution:'phase-dist',training:'phase-form'};
-// statusLabel is now dynamic — see T[currentLang].status
+const statusLabel = T.en.status; // legacy alias — renderCards uses stL dynamically
 
 function renderCards() {
   const list  = getFiltered();
