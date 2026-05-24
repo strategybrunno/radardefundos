@@ -1367,6 +1367,7 @@ function trackEvent(type, meta) {
 }
 
 // ─── Payment gate ────────────────────────────────────────────────────────────
+const PAYWALL_ENABLED = false; // set to true to re-enable payment gate
 const CHECKOUT_FN = 'https://nuynmorhzoqcixoudoht.supabase.co/functions/v1/create-checkout';
 
 function userIsPaid() {
@@ -1376,6 +1377,7 @@ function userIsPaid() {
 }
 
 async function checkPaymentStatus() {
+  if (!PAYWALL_ENABLED) return;
   const params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
     showPaymentProcessing();
