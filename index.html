@@ -539,6 +539,103 @@
     0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)}
   }
 
+  /* ─── ADMIN PANEL ─── */
+  #adminOverlay {
+    position: fixed; inset: 0; z-index: 9998;
+    background: var(--black); overflow-y: auto; display: none;
+  }
+  .admin-header {
+    background: var(--black); border-bottom: 1px solid #1a1a1a;
+    padding: 0 40px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .admin-brand { display: flex; align-items: center; gap: 14px; }
+  .admin-title {
+    font-size: 10px; font-weight: 500; color: var(--gray-600);
+    letter-spacing: 4px; text-transform: uppercase;
+  }
+  .admin-close {
+    background: transparent; border: 1px solid #2a2a2a;
+    color: var(--gray-600); padding: 8px 18px; font-size: 10px;
+    font-family: inherit; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .admin-close:hover { border-color: var(--gray-400); color: var(--white); }
+  .admin-body { max-width: 1400px; margin: 0 auto; padding: 40px; }
+  .admin-stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: #1a1a1a; border: 1px solid #1a1a1a;
+    margin-bottom: 48px;
+  }
+  .admin-stat {
+    background: var(--black); padding: 28px 32px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .admin-stat-num { font-size: 44px; font-weight: 300; color: var(--white); line-height: 1; }
+  .admin-stat-num.amber { color: var(--amber); }
+  .admin-stat-lbl { font-size: 10px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; }
+  .admin-section { margin-bottom: 48px; }
+  .admin-section-title {
+    font-size: 9px; font-weight: 500; color: var(--gray-600);
+    letter-spacing: 4px; text-transform: uppercase;
+    padding-bottom: 12px; border-bottom: 1px solid #1a1a1a; margin-bottom: 0;
+  }
+  .admin-table { width: 100%; border-collapse: collapse; }
+  .admin-table th {
+    font-size: 9px; color: var(--gray-600); letter-spacing: 2px;
+    text-transform: uppercase; text-align: left;
+    padding: 12px 16px; border-bottom: 1px solid #1a1a1a;
+  }
+  .admin-table td {
+    font-size: 12px; color: var(--gray-400); font-weight: 300;
+    padding: 12px 16px; border-bottom: 1px solid #0d0d0d; vertical-align: middle;
+  }
+  .admin-table tr:hover td { background: #080808; color: var(--white); }
+  .admin-table td.strong { color: var(--white); }
+  .admin-table td.amber { color: var(--amber); font-weight: 300; }
+  .admin-bar {
+    display: inline-block; height: 2px; background: var(--amber);
+    vertical-align: middle; margin-left: 8px; min-width: 4px;
+  }
+  .admin-badge {
+    display: inline-block; padding: 2px 8px;
+    font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+    border: 1px solid #2a2a2a; color: var(--gray-600);
+  }
+  .admin-badge.ev-login    { border-color: #1a3a1a; color: #4a8a4a; }
+  .admin-badge.ev-view     { border-color: #1a2a3a; color: #4a6aaa; }
+  .admin-badge.ev-filter   { border-color: #2a2a1a; color: #8a8a4a; }
+  .admin-badge.ev-link     { border-color: #3a1a1a; color: #aa5a5a; }
+  .admin-loading {
+    text-align: center; padding: 80px 0;
+    font-size: 11px; color: var(--gray-600); letter-spacing: 3px; text-transform: uppercase;
+  }
+  .admin-empty {
+    padding: 24px 16px; font-size: 11px;
+    color: #2a2a2a; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .admin-refresh {
+    background: transparent; border: none; color: var(--gray-600);
+    font-size: 10px; font-family: inherit; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer; margin-left: 16px;
+    transition: color 0.2s;
+  }
+  .admin-refresh:hover { color: var(--white); }
+  .btn-admin {
+    background: transparent; color: var(--gray-600);
+    border: 1px solid #2a2a2a; padding: 7px 14px;
+    font-size: 10px; font-family: inherit; font-weight: 300;
+    letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-admin:hover { border-color: var(--gray-400); color: var(--white); }
+  @media (max-width: 900px) {
+    .admin-stats-row { grid-template-columns: repeat(2, 1fr); }
+    .admin-body { padding: 20px 16px; }
+    .admin-header { padding: 0 16px; }
+  }
+
   /* ─── LOCK SCREEN — auth extras ─── */
   .lock-btn:disabled { opacity: 0.45; cursor: not-allowed; }
   .lock-email-wrap { display: flex; flex-direction: column; gap: 0; margin-bottom: 24px; }
@@ -748,7 +845,9 @@
     </div>
     <div class="header-actions">
       <span class="live-dot" id="liveDot">Live</span>
-      <div class="lang-toggle"><button class="lang-btn active" id="btnEN" onclick="setLang('en')">EN</button><div class="lang-sep"></div><button class="lang-btn" id="btnPT" onclick="setLang('pt')">PT</button></div><button class="btn-primary" id="btnSuggestFund" onclick="showAddFundModal()">+ Suggest Fund</button>
+      <div class="lang-toggle"><button class="lang-btn active" id="btnEN" onclick="setLang('en')">EN</button><div class="lang-sep"></div><button class="lang-btn" id="btnPT" onclick="setLang('pt')">PT</button></div>
+      <button class="btn-admin" id="btnAdmin" onclick="openAdmin()" style="display:none">Admin ↗</button>
+      <button class="btn-primary" id="btnSuggestFund" onclick="showAddFundModal()">+ Suggest Fund</button>
     </div>
   </div>
 </header>
@@ -1019,6 +1118,23 @@
   </div>
 </div>
 
+<!-- ADMIN PANEL -->
+<div id="adminOverlay">
+  <div class="admin-header">
+    <div class="admin-brand">
+      <div class="artis-mark sz-sm on-dark">
+        <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+      </div>
+      <span style="width:1px;height:16px;background:#2a2a2a;flex-shrink:0;"></span>
+      <span class="admin-title">Admin Panel</span>
+    </div>
+    <button class="admin-close" onclick="closeAdmin()">× Close</button>
+  </div>
+  <div class="admin-body" id="adminBody">
+    <div class="admin-loading">Loading data...</div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1046,6 +1162,7 @@ sb.auth.getSession().then(({ data: { session } }) => {
   if (session) {
     currentUser = session.user;
     hideLock();
+    updateAdminAccess();
     trackEvent('page_view');
   } else {
     setTimeout(() => {
@@ -1060,6 +1177,7 @@ sb.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_IN' && session) {
     currentUser = session.user;
     hideLock();
+    updateAdminAccess();
     trackEvent('login', { method: (session.user.app_metadata && session.user.app_metadata.provider) || 'email' });
   }
   if (event === 'SIGNED_OUT') {
@@ -1112,7 +1230,162 @@ function trackEvent(type, meta) {
   });
 }
 
-// Tempo de sessão: registra ao esconder a aba
+// ─── Admin panel ────────────────────────────────────────────────────────────
+const ADMIN_EMAIL = 'ogibowskibrunno@gmail.com';
+
+function updateAdminAccess() {
+  const btn = document.getElementById('btnAdmin');
+  if (btn) btn.style.display = (currentUser && currentUser.email === ADMIN_EMAIL) ? '' : 'none';
+}
+
+function openAdmin() {
+  document.getElementById('adminOverlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  loadAdminData();
+}
+
+function closeAdmin() {
+  document.getElementById('adminOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function loadAdminData() {
+  document.getElementById('adminBody').innerHTML = '<div class="admin-loading">Loading data...</div>';
+  const { data: events, error } = await sb
+    .from('events').select('*')
+    .order('created_at', { ascending: false }).limit(1000);
+  if (error || !events) {
+    document.getElementById('adminBody').innerHTML = '<div class="admin-loading">Error — run the admin RLS policy in Supabase SQL Editor.</div>';
+    return;
+  }
+  renderAdminData(events);
+}
+
+function adminTimeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff / 60000), h = Math.floor(m / 60), d = Math.floor(h / 24);
+  if (d > 0) return d + 'd ago';
+  if (h > 0) return h + 'h ago';
+  if (m > 0) return m + 'min ago';
+  return 'just now';
+}
+
+function adminBadge(type) {
+  const cls = { login:'ev-login', page_view:'ev-login', fund_view:'ev-view',
+    filter_applied:'ev-filter', ext_link_click:'ev-link', session_pause:'' };
+  return `<span class="admin-badge ${cls[type]||''}">${type.replace(/_/g,' ')}</span>`;
+}
+
+function renderAdminData(events) {
+  const users = [...new Set(events.map(e => e.user_email).filter(Boolean))];
+  const fundViews = events.filter(e => e.event_type === 'fund_view');
+  const sessions  = events.filter(e => e.event_type === 'session_pause');
+  const avgSession = sessions.length
+    ? (sessions.reduce((s,e) => s + ((e.metadata && e.metadata.duration_seconds) || 0), 0) / sessions.length / 60).toFixed(1)
+    : 0;
+
+  // Top funds
+  const fundCount = {};
+  fundViews.forEach(e => { const n = (e.metadata && e.metadata.fund_name) || '—'; fundCount[n] = (fundCount[n]||0)+1; });
+  const topFunds = Object.entries(fundCount).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const maxFund = topFunds[0] ? topFunds[0][1] : 1;
+
+  // Users activity
+  const userAct = {};
+  events.forEach(e => {
+    if (!e.user_email) return;
+    if (!userAct[e.user_email]) userAct[e.user_email] = { count:0, last:e.created_at };
+    userAct[e.user_email].count++;
+    if (e.created_at > userAct[e.user_email].last) userAct[e.user_email].last = e.created_at;
+  });
+
+  // Filter usage
+  const filterCount = {};
+  events.filter(e=>e.event_type==='filter_applied').forEach(e => {
+    const k = ((e.metadata&&e.metadata.filter)||'') + ':' + ((e.metadata&&e.metadata.value)||'');
+    filterCount[k] = (filterCount[k]||0)+1;
+  });
+  const topFilters = Object.entries(filterCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  // External clicks
+  const linkCount = {};
+  events.filter(e=>e.event_type==='ext_link_click').forEach(e => {
+    const n = (e.metadata&&e.metadata.fund_name)||'—';
+    linkCount[n] = (linkCount[n]||0)+1;
+  });
+  const topLinks = Object.entries(linkCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  const tbl = (heads, rows, empty) => rows.length
+    ? `<table class="admin-table"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`
+    : `<div class="admin-empty">${empty}</div>`;
+
+  document.getElementById('adminBody').innerHTML = `
+    <div class="admin-stats-row">
+      <div class="admin-stat"><span class="admin-stat-num amber">${events.length}</span><span class="admin-stat-lbl">Total Events</span></div>
+      <div class="admin-stat"><span class="admin-stat-num">${users.length}</span><span class="admin-stat-lbl">Unique Users</span></div>
+      <div class="admin-stat"><span class="admin-stat-num">${fundViews.length}</span><span class="admin-stat-lbl">Fund Views</span></div>
+      <div class="admin-stat"><span class="admin-stat-num">${avgSession}</span><span class="admin-stat-lbl">Avg Session (min)</span></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:48px;">
+      <div class="admin-section">
+        <div class="admin-section-title">Top Funds Viewed</div>
+        ${tbl(['Fund','Views',''],
+          topFunds.map(([name,count])=>`<tr>
+            <td class="strong">${name}</td><td class="amber">${count}</td>
+            <td><span class="admin-bar" style="width:${Math.round(count/maxFund*80)}px"></span></td>
+          </tr>`).join(''), 'No fund views yet')}
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-title">Users</div>
+        ${tbl(['Email','Events','Last seen'],
+          Object.entries(userAct).sort((a,b)=>b[1].count-a[1].count).map(([email,d])=>`<tr>
+            <td class="strong">${email}</td><td class="amber">${d.count}</td><td>${adminTimeAgo(d.last)}</td>
+          </tr>`).join(''), 'No users yet')}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:48px;">
+      <div class="admin-section">
+        <div class="admin-section-title">Filter Usage</div>
+        ${tbl(['Filter','Value','Uses'],
+          topFilters.map(([key,count])=>{ const [f,v]=key.split(':'); return `<tr>
+            <td>${f}</td><td class="strong">${v}</td><td class="amber">${count}</td>
+          </tr>`; }).join(''), 'No filters used yet')}
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-title">External Link Clicks</div>
+        ${tbl(['Fund','Clicks'],
+          topLinks.map(([name,count])=>`<tr>
+            <td class="strong">${name}</td><td class="amber">${count}</td>
+          </tr>`).join(''), 'No clicks yet')}
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <div class="admin-section-title">Recent Activity
+        <button class="admin-refresh" onclick="loadAdminData()">↺ Refresh</button>
+      </div>
+      ${tbl(['User','Event','Details','Time'],
+        events.slice(0,30).map(e => {
+          let det = '';
+          if (e.metadata) {
+            if (e.metadata.fund_name) det = e.metadata.fund_name;
+            else if (e.metadata.filter) det = e.metadata.filter + ': ' + e.metadata.value;
+            else if (e.metadata.duration_seconds) det = Math.round(e.metadata.duration_seconds/60) + ' min';
+            else if (e.metadata.method) det = e.metadata.method;
+          }
+          return `<tr>
+            <td>${e.user_email||'—'}</td>
+            <td>${adminBadge(e.event_type)}</td>
+            <td class="strong">${det}</td>
+            <td>${adminTimeAgo(e.created_at)}</td>
+          </tr>`;
+        }).join(''), 'No events yet')}
+    </div>`;
+}
+
+// ─── Tempo de sessão: registra ao esconder a aba
 document.addEventListener('visibilitychange', function() {
   if (!currentUser) return;
   if (document.hidden) {
