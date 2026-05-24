@@ -539,6 +539,87 @@
     0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)}
   }
 
+  /* ─── PAYWALL ─── */
+  #paywallOverlay {
+    position: fixed; inset: 0; z-index: 9995;
+    background: var(--black);
+    display: none;
+    grid-template-columns: 1fr 1fr;
+  }
+  #paywallOverlay.visible { display: grid; }
+  .paywall-brand {
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding: 56px 64px;
+    border-right: 1px solid #1e1e1e;
+    overflow: hidden; position: relative;
+  }
+  .paywall-brand-mid {
+    position: absolute; left: 64px; right: 64px; top: 50%;
+    transform: translateY(-50%);
+  }
+  .paywall-features { display: flex; flex-direction: column; gap: 0; margin-top: 24px; }
+  .paywall-feature {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0; border-bottom: 1px solid #111;
+    font-size: 12px; color: var(--gray-400); font-weight: 300;
+    letter-spacing: 0.3px; line-height: 1.6;
+  }
+  .paywall-feature:first-child { border-top: 1px solid #111; }
+  .paywall-feature-icon { color: var(--amber); font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+  .paywall-feature strong { color: var(--white); font-weight: 300; }
+  .paywall-form-panel {
+    display: flex; flex-direction: column;
+    align-items: flex-start; justify-content: center;
+    padding: 56px 72px;
+  }
+  .paywall-logo { margin-bottom: 48px; }
+  .paywall-form-inner { width: 100%; max-width: 320px; display: flex; flex-direction: column; }
+  .paywall-access-label {
+    font-size: 9px; font-weight: 500; color: var(--gray-600);
+    letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px;
+  }
+  .paywall-price-wrap { margin-bottom: 32px; }
+  .paywall-price-tag {
+    font-size: 9px; color: var(--gray-600);
+    letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .paywall-price-amount {
+    font-size: 56px; font-weight: 300; color: var(--white); line-height: 1;
+    letter-spacing: -2px;
+  }
+  .paywall-price-currency {
+    font-size: 20px; font-weight: 300; color: var(--gray-400);
+    vertical-align: super; margin-right: 4px; letter-spacing: 0;
+  }
+  .paywall-price-period {
+    font-size: 11px; color: var(--gray-600); letter-spacing: 2px;
+    text-transform: uppercase; margin-top: 8px;
+  }
+  .paywall-btn {
+    width: 100%; background: var(--white); color: var(--black);
+    border: none; padding: 16px; font-size: 11px; font-family: inherit;
+    font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s; margin-top: 0;
+  }
+  .paywall-btn:hover { background: var(--gray-200); }
+  .paywall-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .paywall-foot {
+    margin-top: 24px; font-size: 10px; color: #2a2a2a;
+    letter-spacing: 2px; text-transform: uppercase; line-height: 1.8;
+  }
+  .paywall-processing {
+    position: fixed; inset: 0; background: var(--black);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px;
+  }
+  @media (max-width: 800px) {
+    #paywallOverlay.visible { grid-template-columns: 1fr; }
+    .paywall-brand { display: none; }
+    .paywall-form-panel { padding: 48px 32px; align-items: center; }
+    .paywall-form-inner { max-width: 100%; }
+  }
+
   /* ─── ADMIN PANEL ─── */
   #adminOverlay {
     position: fixed; inset: 0; z-index: 9998;
@@ -1118,6 +1199,59 @@
   </div>
 </div>
 
+<!-- PAYWALL -->
+<div id="paywallOverlay">
+  <!-- Brand panel (left) -->
+  <div class="paywall-brand">
+    <div class="lock-brand-top">
+      <div class="artis-mark sz-md on-dark">
+        <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+      </div>
+      <div class="lock-brand-tagline">Audiovisual Funds</div>
+    </div>
+    <div class="paywall-brand-mid">
+      <div class="lock-brand-headline">
+        <strong>36 funds</strong> mapped<br>
+        <strong>45 countries</strong> partners<br>
+        <strong>€ 120M+</strong> available<br>
+      </div>
+      <div class="lock-brand-rule"></div>
+      <div class="paywall-features">
+        <div class="paywall-feature"><span class="paywall-feature-icon">→</span><span><strong>Full access</strong> to all 36 international funds and bilateral agreements</span></div>
+        <div class="paywall-feature"><span class="paywall-feature-icon">→</span><span><strong>Filters</strong> by region, phase, format and status</span></div>
+        <div class="paywall-feature"><span class="paywall-feature-icon">→</span><span><strong>Bilingual</strong> — EN / PT interface</span></div>
+        <div class="paywall-feature"><span class="paywall-feature-icon">→</span><span><strong>Regular updates</strong> as new funds are added</span></div>
+        <div class="paywall-feature"><span class="paywall-feature-icon">→</span><span><strong>Permanent access</strong> — one-time payment, no subscription</span></div>
+      </div>
+    </div>
+    <div class="lock-brand-bottom">© ARTIS 2026</div>
+  </div>
+
+  <!-- Pricing panel (right) -->
+  <div class="paywall-form-panel">
+    <div class="paywall-logo">
+      <div class="artis-mark sz-sm on-dark">
+        <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+      </div>
+    </div>
+    <div class="paywall-form-inner">
+      <div class="paywall-access-label">Get Access</div>
+      <div class="paywall-price-wrap">
+        <div class="paywall-price-tag">One-time payment</div>
+        <div class="paywall-price-amount">
+          <span class="paywall-price-currency">R$</span>297
+        </div>
+        <div class="paywall-price-period">Permanent access — no subscription</div>
+      </div>
+      <button class="paywall-btn" id="paywallBtn" onclick="initiatePayment()">Pay R$ 297 →</button>
+      <div class="paywall-foot">
+        Secure payment via Stripe<br>
+        Questions? contact@artis.com
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN PANEL -->
 <div id="adminOverlay">
   <div class="admin-header">
@@ -1163,6 +1297,7 @@ sb.auth.getSession().then(({ data: { session } }) => {
     currentUser = session.user;
     hideLock();
     updateAdminAccess();
+    checkPaymentStatus();
     trackEvent('page_view');
   } else {
     setTimeout(() => {
@@ -1178,6 +1313,7 @@ sb.auth.onAuthStateChange((event, session) => {
     currentUser = session.user;
     hideLock();
     updateAdminAccess();
+    checkPaymentStatus();
     trackEvent('login', { method: (session.user.app_metadata && session.user.app_metadata.provider) || 'email' });
   }
   if (event === 'SIGNED_OUT') {
@@ -1228,6 +1364,87 @@ function trackEvent(type, meta) {
     event_type: type,
     metadata: meta || {}
   });
+}
+
+// ─── Payment gate ────────────────────────────────────────────────────────────
+const CHECKOUT_FN = 'https://nuynmorhzoqcixoudoht.supabase.co/functions/v1/create-checkout';
+
+function userIsPaid() {
+  if (!currentUser) return false;
+  if (currentUser.email === ADMIN_EMAIL) return true;
+  return currentUser.user_metadata && currentUser.user_metadata.paid === true;
+}
+
+async function checkPaymentStatus() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    showPaymentProcessing();
+    await pollForPayment(0);
+    return;
+  }
+  if (!userIsPaid()) showPaywall();
+}
+
+function showPaywall() {
+  document.getElementById('paywallOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function hidePaywall() {
+  const el = document.getElementById('paywallOverlay');
+  if (!el) return;
+  el.style.opacity = '0';
+  el.style.transition = 'opacity 0.5s';
+  setTimeout(() => { el.classList.remove('visible'); el.style.opacity = '1'; document.body.style.overflow = ''; }, 500);
+}
+
+async function initiatePayment() {
+  const btn = document.getElementById('paywallBtn');
+  if (!btn) return;
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const resp = await fetch(CHECKOUT_FN, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+      body: JSON.stringify({ user_id: currentUser.id, email: currentUser.email })
+    });
+    const json = await resp.json();
+    if (json.url) { window.location.href = json.url; return; }
+    throw new Error(json.error || 'No URL returned');
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Pay R$ 297 →';
+    showToast('Payment error: ' + e.message);
+  }
+}
+
+function showPaymentProcessing() {
+  const el = document.getElementById('paywallOverlay');
+  el.classList.add('visible');
+  el.innerHTML = `<div class="paywall-processing">
+    <div class="artis-mark sz-sm on-dark" style="margin-bottom:32px;">
+      <span class="m-art">ART</span><span class="m-sep"></span><span class="m-is">IS</span>
+    </div>
+    <div style="font-size:9px;color:var(--gray-600);letter-spacing:4px;text-transform:uppercase;margin-bottom:12px;">Payment confirmed</div>
+    <div style="font-size:14px;color:var(--white);letter-spacing:1px;" id="processingMsg">Activating your access...</div>
+  </div>`;
+}
+
+async function pollForPayment(attempt) {
+  if (attempt > 15) {
+    const msg = document.getElementById('processingMsg');
+    if (msg) msg.innerHTML = 'Access activated! <a href="javascript:location.reload()" style="color:var(--amber)">Click here to continue →</a>';
+    return;
+  }
+  const { data: { user } } = await sb.auth.refreshSession();
+  if (user && user.user_metadata && user.user_metadata.paid === true) {
+    currentUser = user;
+    window.history.replaceState({}, '', window.location.pathname);
+    hidePaywall();
+    showToast('Access activated! Welcome to ARTIS Radar.');
+  } else {
+    setTimeout(() => pollForPayment(attempt + 1), 2000);
+  }
 }
 
 // ─── Admin panel ────────────────────────────────────────────────────────────
