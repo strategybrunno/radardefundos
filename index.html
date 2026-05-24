@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARTIS — Radar de Fundos Audiovisuais</title>
 <link href="https://fonts.googleapis.com/css2?family=Cooper+Hewitt:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   :root {
     --white:   #FFFFFF;
@@ -538,6 +539,30 @@
     0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)}
   }
 
+  /* ─── LOCK SCREEN — auth extras ─── */
+  .lock-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .lock-email-wrap { display: flex; flex-direction: column; gap: 0; margin-bottom: 24px; }
+  .lock-divider {
+    text-align: center; margin: 24px 0 18px;
+    font-size: 9px; color: #2a2a2a; letter-spacing: 3px; text-transform: uppercase;
+    position: relative;
+  }
+  .lock-divider::before, .lock-divider::after {
+    content: ''; position: absolute; top: 50%; width: 30%;
+    height: 1px; background: #1e1e1e;
+  }
+  .lock-divider::before { left: 0; }
+  .lock-divider::after { right: 0; }
+  .lock-google-btn {
+    width: 100%; background: transparent; color: var(--gray-600);
+    border: 1px solid #1e1e1e; padding: 13px 16px; font-size: 10px;
+    font-family: inherit; font-weight: 300; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer; transition: border-color 0.2s, color 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .lock-google-btn:hover { border-color: var(--gray-400); color: var(--white); }
+  .lock-google-btn svg { flex-shrink: 0; }
+
   /* ─── BREAKPOINTS (mobile-first: min-width) ─── */
 
   /* Lock screen — mobile */
@@ -674,12 +699,34 @@
     </div>
     <div class="lock-form-inner">
       <div class="lock-access-label" id="lockAccessLabel">Private Access</div>
+
+      <!-- Email -->
+      <div class="lock-email-wrap">
+        <label class="lock-input-label" id="lockEmailLabel" for="lockEmail">Email</label>
+        <input class="lock-input" id="lockEmail" type="email" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter')document.getElementById('lockPass').focus()">
+      </div>
+
+      <!-- Password -->
       <div class="lock-input-wrap">
         <label class="lock-input-label" id="lockPassLabel" for="lockPass">Password</label>
-        <input class="lock-input" id="lockPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')unlock()">
+        <input class="lock-input" id="lockPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginWithEmail()">
         <div class="lock-error" id="lockError"></div>
       </div>
-      <button class="lock-btn" id="lockBtn" onclick="unlock()">Enter →</button>
+
+      <button class="lock-btn" id="lockBtn" onclick="loginWithEmail()">Enter →</button>
+
+      <div class="lock-divider" id="lockDivider"><span>or</span></div>
+
+      <button class="lock-google-btn" onclick="loginWithGoogle()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        <span id="lockGoogleLbl">Continue with Google</span>
+      </button>
+
       <div class="lock-form-foot" id="lockFoot">Restricted access</div>
     </div>
   </div>
@@ -977,40 +1024,103 @@
 
 <script>
 // ═══════════════════════════════════════
-// ACESSO — altere a senha abaixo
+// SUPABASE CONFIG
+// Após criar o projeto em supabase.com, substitua os dois valores abaixo.
 // ═══════════════════════════════════════
-const ACCESS_PASSWORD = 'is3yR&cF0c882YoH';
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-(function initLock() {
+// ─── Auth state ─────────────────────────────────────────────────────────────
+let currentUser = null;
+let sessionStart = Date.now();
+
+function hideLock() {
   const lock = document.getElementById('lockScreen');
-  // Já autenticado nesta sessão?
-  if (sessionStorage.getItem('artis_auth') === '1') {
-    lock.style.display = 'none';
+  lock.classList.add('unlocked');
+  setTimeout(() => lock.style.display = 'none', 420);
+}
+
+// Verificar sessão existente ao carregar
+sb.auth.getSession().then(({ data: { session } }) => {
+  if (session) {
+    currentUser = session.user;
+    hideLock();
+    trackEvent('page_view');
+  } else {
+    setTimeout(() => {
+      const el = document.getElementById('lockEmail');
+      if (el) el.focus();
+    }, 100);
+  }
+});
+
+// Listener de mudanças de auth (inclui redirect do Google OAuth)
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    currentUser = session.user;
+    hideLock();
+    trackEvent('login', { method: (session.user.app_metadata && session.user.app_metadata.provider) || 'email' });
+  }
+  if (event === 'SIGNED_OUT') {
+    currentUser = null;
+    const lock = document.getElementById('lockScreen');
+    lock.style.display = 'grid';
+    lock.classList.remove('unlocked');
+    lock.style.opacity = '1';
+  }
+});
+
+async function loginWithEmail() {
+  const email = document.getElementById('lockEmail').value.trim();
+  const pass  = document.getElementById('lockPass').value;
+  const err   = document.getElementById('lockError');
+  const btn   = document.getElementById('lockBtn');
+  if (!email || !pass) {
+    err.textContent = currentLang==='en' ? 'Fill in email and password.' : 'Preencha e-mail e senha.';
     return;
   }
-  // Focar input ao carregar
-  window.addEventListener('DOMContentLoaded', () => {
+  btn.disabled = true;
+  btn.textContent = '...';
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  btn.disabled = false;
+  btn.textContent = currentLang==='en' ? 'Enter →' : 'Entrar →';
+  if (error) {
+    err.textContent = currentLang==='en' ? 'Invalid credentials.' : 'Credenciais inválidas.';
     const inp = document.getElementById('lockPass');
-    if (inp) inp.focus();
-  });
-})();
-
-function unlock() {
-  const inp = document.getElementById('lockPass');
-  const err = document.getElementById('lockError');
-  const lock = document.getElementById('lockScreen');
-  if (inp.value === ACCESS_PASSWORD) {
-    sessionStorage.setItem('artis_auth', '1');
-    lock.classList.add('unlocked');
-    setTimeout(() => lock.style.display = 'none', 420);
-    err.textContent = '';
-  } else {
     inp.classList.add('shake');
-    err.textContent = currentLang==='en' ? 'Incorrect password.' : 'Senha incorreta.';
     inp.value = '';
     setTimeout(() => { inp.classList.remove('shake'); inp.focus(); }, 400);
   }
 }
+
+async function loginWithGoogle() {
+  await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href }
+  });
+}
+
+// ─── Event tracking ─────────────────────────────────────────────────────────
+function trackEvent(type, meta) {
+  if (!currentUser) return;
+  sb.from('events').insert({
+    user_id: currentUser.id,
+    user_email: currentUser.email,
+    event_type: type,
+    metadata: meta || {}
+  });
+}
+
+// Tempo de sessão: registra ao esconder a aba
+document.addEventListener('visibilitychange', function() {
+  if (!currentUser) return;
+  if (document.hidden) {
+    trackEvent('session_pause', { duration_seconds: Math.round((Date.now() - sessionStart) / 1000) });
+  } else {
+    sessionStart = Date.now();
+  }
+});
 
 // ═══════════════════════════════════════
 // DATA  (28 fundos — atualizado com docx Acordos ANCINE)
@@ -1596,6 +1706,7 @@ function getFiltered() {
 function toggleFilter(el) {
   const type = el.dataset.filter, val = el.dataset.value;
   activeFilters[type] = val;
+  trackEvent('filter_applied', { filter: type, value: val });
   // sync all elements with same filter (sidebar + mobile bar)
   document.querySelectorAll(`[data-filter="${type}"]`).forEach(e=>e.classList.remove('active'));
   document.querySelectorAll(`[data-filter="${type}"][data-value="${val}"]`).forEach(e=>e.classList.add('active'));
@@ -1657,7 +1768,7 @@ const T = {
       emptyMsg:'No funds found',
       footerNote:'International Audiovisual Funds Radar — Updated 2026',
       lockTagline:'Audiovisual Funds',
-      lockAccessLabel:'Private Access', lockPassLabel:'Password', lockBtn:'Enter →', lockFoot:'Restricted access',
+      lockAccessLabel:'Private Access', lockEmailLabel:'Email', lockPassLabel:'Password', lockBtn:'Enter →', lockDivider:'or', lockGoogleLbl:'Continue with Google', lockFoot:'Restricted access',
       suggestTitle:'Suggest Fund', suggestSubtitle:"Submit an international fund via link — we'll add it to the database.",
       sfUrlLabel:'Fund Link / URL', sfNameLabel:'Fund Name', sfOrgLabel:'Organization',
       sfRegionLabel:'Region', sfStatusLabel:'Status', sfPhasesLabel:'Supported Phases', sfFormatsLabel:'Formats',
@@ -1697,7 +1808,7 @@ const T = {
       emptyMsg:'Nenhum fundo encontrado',
       footerNote:'Radar de Fundos Audiovisuais Internacionais — Atualizado 2026',
       lockTagline:'Fundos Audiovisuais',
-      lockAccessLabel:'Acesso Privado', lockPassLabel:'Senha', lockBtn:'Entrar →', lockFoot:'Acesso restrito',
+      lockAccessLabel:'Acesso Privado', lockEmailLabel:'E-mail', lockPassLabel:'Senha', lockBtn:'Entrar →', lockDivider:'ou', lockGoogleLbl:'Entrar com Google', lockFoot:'Acesso restrito',
       suggestTitle:'Sugerir Fundo', suggestSubtitle:'Indique um fundo internacional via link — adicionamos à base.',
       sfUrlLabel:'Link / URL do fundo', sfNameLabel:'Nome do fundo', sfOrgLabel:'Organização',
       sfRegionLabel:'Região', sfStatusLabel:'Status', sfPhasesLabel:'Fases apoiadas', sfFormatsLabel:'Formatos',
@@ -1730,7 +1841,7 @@ function setLang(lang) {
   const ids = ['headerSub','liveDot','lblOpen','lblTotal','lblCountries','lblClosing',
     'featLabel','featTitle','featDesc','featCta','ftStatus','ftRegion','ftPhase','ftFormat',
     'sidebarCredit','lblFundsFound','sortOptStatus','sortOptName','sortOptGrant','emptyMsg','footerNote',
-    'lockTagline','lockAccessLabel','lockPassLabel','lockBtn','lockFoot',
+    'lockTagline','lockAccessLabel','lockEmailLabel','lockPassLabel','lockBtn','lockDivider','lockGoogleLbl','lockFoot',
     'suggestTitle','suggestSubtitle','sfUrlLabel','sfNameLabel','sfOrgLabel',
     'sfRegionLabel','sfStatusLabel','sfPhasesLabel','sfFormatsLabel',
     'sfGrantLabel','sfDeadlineLabel','sfNotesLabel',
@@ -1829,6 +1940,7 @@ function updateCounts() {
 function openModal(id) {
   const f = funds.find(x=>x.id===id);
   if(!f) return;
+  trackEvent('fund_view', { fund_id: f.id, fund_name: f.name, fund_region: f.region, fund_status: f.status });
   const phL = T[currentLang].phase;
   const stL = T[currentLang].status;
   const fmL = T[currentLang].format;
@@ -1892,7 +2004,7 @@ function openModal(id) {
       ${f.notes?`<div class="note-box"><p><strong>${uL.modalNote}</strong>${f.notes}</p></div>`:''}
 
       <div class="modal-actions">
-        <button class="btn-modal-primary" onclick="window.open('${f.url}','_blank')">${uL.modalAccess}</button>
+        <button class="btn-modal-primary" onclick="trackEvent('ext_link_click',{fund_id:'${f.id}',fund_name:'${f.name.replace(/'/g,'').replace(/"/g,'')}',url:'${f.url}'});window.open('${f.url}','_blank')">${uL.modalAccess}</button>
         <button class="btn-modal-secondary" onclick="closeModal()">${uL.modalClose}</button>
       </div>
     </div>`;
