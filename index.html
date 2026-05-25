@@ -1615,9 +1615,10 @@ async function loginWithEmail() {
 }
 
 async function loginWithGoogle() {
+  const cleanUrl = window.location.origin + window.location.pathname;
   await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.href }
+    options: { redirectTo: cleanUrl }
   });
 }
 
