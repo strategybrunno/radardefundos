@@ -877,11 +877,24 @@
   .ai-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .ai-response {
     font-size: 13px; color: var(--gray-300); font-weight: 300;
-    line-height: 1.8; letter-spacing: 0.2px;
-    max-height: 220px; overflow-y: auto; padding-right: 8px;
+    line-height: 1.85; letter-spacing: 0.15px;
+    max-height: 260px; overflow-y: auto; padding-right: 8px;
   }
   .ai-response.thinking { color: var(--gray-600); font-style: italic; letter-spacing: 1px; font-size: 11px; }
-  @media (max-width: 768px) { .ai-panel-inner { padding: 14px 16px; } }
+  .ai-response strong { color: var(--white); font-weight: 500; }
+  .ai-response .ai-h { color: var(--amber); font-size: 10px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; display: block; margin: 14px 0 6px; border-bottom: 1px solid #1e1e1e; padding-bottom: 5px; }
+  .ai-response .ai-h:first-child { margin-top: 0; }
+  .ai-response .ai-bullet { display: flex; gap: 10px; margin: 5px 0; }
+  .ai-response .ai-bullet::before { content: '→'; color: var(--amber); flex-shrink: 0; font-size: 11px; margin-top: 2px; }
+  .ai-response .ai-note { background: #0d0d0d; border-left: 2px solid var(--amber); padding: 10px 14px; margin: 10px 0; font-size: 12px; color: var(--gray-400); }
+  .ai-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .ai-chip {
+    background: transparent; border: 1px solid #2a2a2a; color: var(--gray-600);
+    padding: 4px 12px; font-size: 10px; font-family: inherit; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.15s; text-align: left;
+  }
+  .ai-chip:hover { border-color: var(--amber); color: var(--amber); }
+  @media (max-width: 768px) { .ai-panel-inner { padding: 14px 16px; } .ai-chips { display: none; } }
 
   /* ─── USER AVATAR BUTTON ─── */
   .btn-avatar {
@@ -1143,10 +1156,17 @@
 <!-- AI PANEL -->
 <div class="ai-panel" id="aiPanel">
   <div class="ai-panel-inner">
-    <div class="ai-label">✦ ARTIS AI — Fund Assistant</div>
+    <div class="ai-label">✦ ARTIS AI — Analista de Enquadramento</div>
     <div class="ai-input-row">
-      <input class="ai-input" id="aiInput" type="text" placeholder="Ask about funds, regions, deadlines, eligibility..." onkeydown="if(event.key==='Enter')sendAI()">
-      <button class="ai-send-btn" id="aiSendBtn" onclick="sendAI()">Ask →</button>
+      <input class="ai-input" id="aiInput" type="text" placeholder="Descreva seu projeto ou pergunta — ex: documentário brasileiro em desenvolvimento, co-produção Europa..." onkeydown="if(event.key==='Enter')sendAI()">
+      <button class="ai-send-btn" id="aiSendBtn" onclick="sendAI()">Analisar →</button>
+    </div>
+    <div class="ai-chips" id="aiChips">
+      <button class="ai-chip" onclick="askAI('Quais fundos são mais adequados para um documentário brasileiro em fase de desenvolvimento buscando co-produção europeia?')">Documentário · Desenvolvimento · Europa</button>
+      <button class="ai-chip" onclick="askAI('Quais são os fundos com prazo aberto agora e maior valor de bolsa disponível?')">Fundos abertos · Maior bolsa</button>
+      <button class="ai-chip" onclick="askAI('Meu projeto é uma ficção de longa-metragem na fase de produção. Quais fundos me atendem?')">Ficção · Produção</button>
+      <button class="ai-chip" onclick="askAI('Existe algum fundo específico para animação ou séries brasileiras?')">Animação / Séries</button>
+      <button class="ai-chip" onclick="askAI('Quais são os fundos ibero-americanos ou lusófonos acessíveis ao Brasil?')">Ibero-América · Lusofonia</button>
     </div>
     <div class="ai-response" id="aiResponse" style="display:none"></div>
   </div>
@@ -2055,41 +2075,88 @@ function toggleAI() {
   if (aiPanelOpen) setTimeout(() => { const inp = document.getElementById('aiInput'); if (inp) inp.focus(); }, 350);
 }
 
+function renderAIMarkdown(text) {
+  // Escape HTML first
+  let html = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Headers (## or ###)
+  html = html.replace(/^#{1,3} (.+)$/gm, '<span class="ai-h">$1</span>');
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Bullet points (-, *, •)
+  html = html.replace(/^[\-\*•] (.+)$/gm, '<div class="ai-bullet"><span>$1</span></div>');
+  // Numbered list
+  html = html.replace(/^\d+\. (.+)$/gm, '<div class="ai-bullet"><span>$1</span></div>');
+  // Note/tip blocks (> text)
+  html = html.replace(/^&gt; (.+)$/gm, '<div class="ai-note">$1</div>');
+  // Double newline = paragraph break
+  html = html.replace(/\n\n/g, '<br>');
+  // Single newline
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+function askAI(query) {
+  const input = document.getElementById('aiInput');
+  if (input) { input.value = query; }
+  sendAI();
+}
+
 async function sendAI() {
   const input = document.getElementById('aiInput');
   const resp = document.getElementById('aiResponse');
   const btn = document.getElementById('aiSendBtn');
+  const chips = document.getElementById('aiChips');
   if (!input || !resp || !btn) return;
   const query = input.value.trim();
   if (!query) return;
+
   resp.style.display = 'block';
   resp.className = 'ai-response thinking';
-  resp.textContent = 'Thinking...';
+  resp.textContent = 'Analisando fundos...';
+  if (chips) chips.style.display = 'none';
   btn.disabled = true;
+
   try {
     const { data: { session } } = await sb.auth.getSession();
     const headers = { 'Content-Type': 'application/json' };
     if (session) headers['Authorization'] = 'Bearer ' + session.access_token;
-    // Build a compact fund context for the AI
+
+    // Contexto compacto dos fundos
     const fundContext = funds.map(f =>
-      `${f.name} | ${f.org} | Status: ${f.status} | Region: ${f.region} | Grant: ${f.grant} | Deadline: ${f.deadline} | Phases: ${f.phases.join(',')} | Formats: ${f.formats.join(',')}`
-    ).join('\n');
+      `FUNDO: ${f.name}\nOrg: ${f.org}\nStatus: ${f.status}\nRegião: ${f.regions_display}\nBolsa: ${f.grant}\nPrazo: ${f.deadline}\nFases: ${f.phases.join(', ')}\nFormatos: ${f.formats.join(', ')}\nPaíses: ${f.countries.join(', ')}`
+    ).join('\n---\n');
+
+    // Prompt enriquecido para enquadramento de projetos
+    const enrichedQuery = `Você é um analista especialista em financiamento audiovisual internacional para projetos brasileiros.
+
+INSTRUÇÕES DE FORMATAÇÃO:
+- Use **negrito** para nomes de fundos e valores importantes
+- Use ## para títulos de seção quando houver múltiplos fundos
+- Use listas com - para critérios de elegibilidade e próximos passos
+- Seja direto e prático — o usuário quer saber SE e COMO se enquadra
+- Termine sempre com uma seção "## Próximos Passos" com ações concretas
+- Responda em português
+
+PERGUNTA DO USUÁRIO:
+${query}`;
+
     const res = await fetch(AI_FN, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ query, fund_context: fundContext })
+      body: JSON.stringify({ query: enrichedQuery, fund_context: fundContext })
     });
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(errText || res.statusText);
-    }
+
+    if (!res.ok) throw new Error(await res.text() || res.statusText);
     const json = await res.json();
+    const answer = json.answer || json.response || 'Sem resposta.';
+
     resp.className = 'ai-response';
-    resp.textContent = json.answer || json.response || 'No response.';
-    trackEvent('ai_search', { query: query.substring(0,120) });
+    resp.innerHTML = renderAIMarkdown(answer);
+    trackEvent('ai_search', { query: query.substring(0, 120) });
   } catch(e) {
     resp.className = 'ai-response';
-    resp.textContent = 'AI search not available yet. Deploy the ai-search Edge Function and set ANTHROPIC_API_KEY in Supabase secrets.';
+    resp.innerHTML = '<span style="color:var(--gray-600);font-size:11px;letter-spacing:1px;">IA não disponível. Configure ANTHROPIC_API_KEY no Supabase → Edge Functions → Secrets.</span>';
   }
   btn.disabled = false;
 }
